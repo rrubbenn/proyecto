@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `cuaderno`
 --
-CREATE DATABASE IF NOT EXISTS `cuaderno` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS `cuaderno` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `cuaderno`;
 
 -- --------------------------------------------------------
@@ -31,7 +31,7 @@ USE `cuaderno`;
 
 CREATE TABLE `Alumno` (
   `id_alumno` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Alumno`
@@ -66,7 +66,7 @@ CREATE TABLE `Curso` (
   `fecha_inicio` datetime NOT NULL,
   `fecha_fin` datetime NOT NULL,
   `anyo` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Curso`
@@ -89,7 +89,7 @@ INSERT INTO `Curso` (`id_curso`, `nombre`, `fecha_inicio`, `fecha_fin`, `anyo`) 
 
 CREATE TABLE `Evaluable` (
   `id_evaluable` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Evaluable`
@@ -110,7 +110,7 @@ CREATE TABLE `Material` (
   `descripcion` varchar(500) NOT NULL,
   `archivo` varchar(100) NOT NULL,
   `id_curso` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Material`
@@ -138,7 +138,7 @@ INSERT INTO `Material` (`id_material`, `nombre`, `descripcion`, `archivo`, `id_c
 
 CREATE TABLE `NoEvaluable` (
   `id_noevaluable` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `NoEvaluable`
@@ -156,7 +156,7 @@ INSERT INTO `NoEvaluable` (`id_noevaluable`) VALUES
 CREATE TABLE `Participar_Alumno` (
   `id_alumno` int NOT NULL,
   `id_curso` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Participar_Alumno`
@@ -174,7 +174,7 @@ INSERT INTO `Participar_Alumno` (`id_alumno`, `id_curso`) VALUES
 CREATE TABLE `Participar_Profesor` (
   `id_profesor` int NOT NULL,
   `id_curso` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Participar_Profesor`
@@ -206,7 +206,7 @@ CREATE TABLE `Persona` (
   `mail` varchar(50) NOT NULL,
   `telefono` int NOT NULL,
   `id_rol` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Persona`
@@ -282,7 +282,7 @@ DELIMITER ;
 
 CREATE TABLE `Profesor` (
   `id_profesor` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Profesor`
@@ -320,10 +320,10 @@ INSERT INTO `Profesor` (`id_profesor`) VALUES
 CREATE TABLE `Realizar` (
   `id_alumno` int NOT NULL,
   `id_evaluable` int NOT NULL,
-  `entrega_alumno` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `entrega_alumno` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `nota` float NOT NULL,
   `observaciones` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Realizar`
@@ -345,7 +345,7 @@ INSERT INTO `Realizar` (`id_alumno`, `id_evaluable`, `entrega_alumno`, `nota`, `
 CREATE TABLE `Rol` (
   `id_rol` int NOT NULL,
   `descripcion` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `Rol`
