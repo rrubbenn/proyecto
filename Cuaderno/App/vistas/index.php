@@ -10,18 +10,6 @@
         </ol>
     </nav>
 
-    <div class="row">
-        <div class="card col-5">
-            <div class="card-body">
-                This is some text within a card body.
-            </div>
-        </div>
-        <div class="card col-5 offset-2">
-            <div class="card-body">
-                This is some text within a card body.
-            </div>
-        </div>
-    </div>
 </div>
 
 

@@ -35,8 +35,28 @@
                             <a class="nav-link" href="<?php echo RUTA_URL ?>/curso/">Cursos</a>
                         <?php endif ?>
                     </li>
+                    <li class="nav-item">
+                        <?php if (isset($datos['menuActivo']) && $datos['menuActivo'] == 'curso' ): ?>
+                            <a class="nav-link active" href="<?php echo RUTA_URL?>/curso/ver_curso/<?php echo $datos["cursoactual"];?>/">Curso</a>
+                        <?php else: ?>
+                            <a class="nav-link" href="<?php echo RUTA_URL?>/curso/ver_curso/<?php echo $datos["cursoactual"];?>">Curso</a>
+                        <?php endif ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php if (isset($datos['menuActivo']) && $datos['menuActivo'] == 'profesor' ): ?>
+                            <a class="nav-link active" href="<?php echo RUTA_URL?>/curso/ver_profesores/<?php echo $datos["cursoactual"];?>">Profesores</a>
+                        <?php else: ?>
+                            <a class="nav-link" href="<?php echo RUTA_URL?>/curso/ver_profesores/<?php echo $datos["cursoactual"];?>">Profesores</a>
+                        <?php endif ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php if (isset($datos['menuActivo']) && $datos['menuActivo'] == 'alumno' ): ?>
+                            <a class="nav-link active" href="<?php echo RUTA_URL?>/curso/ver_alumnos/<?php echo $datos["cursoactual"];?>">Alumnos</a>
+                        <?php else: ?>
+                            <a class="nav-link" href="<?php echo RUTA_URL?>/curso/ver_alumnos/<?php echo $datos["cursoactual"];?>">Alumnos</a>
+                        <?php endif ?>
+                    </li>
                 </ul>
-
 
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                     <li class="navbar-text">
@@ -53,4 +73,3 @@
     </nav>
 
     <br><br><br>
-    
