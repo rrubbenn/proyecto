@@ -47,7 +47,7 @@
  
  
 
-  /* ***************************** h1 ******************************************** */
+  /* ******************************************** h1 ******************************************** */
 
    h1 {
     /* font-family: 'Great Vibes', cursive; */
@@ -57,7 +57,7 @@
     text-shadow: 2px 2px #ccc;
   }
 
-  /* ***************************** row / col ******************************************** */
+  /* ******************************************** row / col ******************************************** */
 
 
   /* .col-md-4 {
@@ -65,5 +65,55 @@
   } */
 
   
+/* ******************************************** modal ******************************************** */
 
+  .modal-manual {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111bd;
+    overflow: auto;
+
+  }
+
+  form > input {
+
+    width: 100%;
+
+  }
+
+  form > textarea {
+
+    width: 100%;
+
+  }
+
+  .modal-contenido {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+  }
+
+  .modal-header {
+    background-color: #fefefe;
+    width: 100%; 
+  }
+
+  .modal-body {
+    background-color: #fefefe;
+    width: 100%; 
+  }
   
+
+  .modal-footer {
+    background-color: #fefefe;
+    width: 100%; 
+  }
+  
+
+

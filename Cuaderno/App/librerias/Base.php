@@ -76,6 +76,11 @@
             return $this->stmt->fetch(PDO::FETCH_OBJ);
         }
 
+        public function registroIndividual(){
+            $this->execute();
+            return $this->stmt->fetchColumn();
+        }
+
         // Obtener el numero de registros 
         public function rowCount(){
             $this->execute();

@@ -6,8 +6,8 @@ class Curso extends Controlador{
 
         Sesion::iniciarSesion($this->datos);
 
-        $this->datos["menuActivo"] = "curso";
-        $this->datos["curso"] = false;
+        //Indica que se ilumina en el menu superior
+        $this->datos["menuActivo"] = "cursos";
 
         $this->CursoModelo = $this->Modelo('CursoModelo');
         
@@ -27,7 +27,7 @@ class Curso extends Controlador{
 
         $this->datos["CursosProfesor"]=$this->CursoModelo->getCursos($this->datos['usuarioSesion']->id_persona);
 
-        $this->vista("CursosAdministrador/index",$this->datos);
+        $this->vista("CursosProfesor/index",$this->datos);
 
     }
 
@@ -35,34 +35,78 @@ class Curso extends Controlador{
 
         $this->datos['materiales']=$this->CursoModelo->getMateriales($id_curso);
 
-        $this->datos["menuActivo"] = "material";
-        $this->datos["curso"] = true;
+        //Indica que se ilumina en el menu superior
+        $this->datos["menuActivo"] = "curso";
 
-        $this->vista("/CursosAdministrador/ver_curso",$this->datos);
+        $this->datos["cursoactual"] = $id_curso;
+
+        $this->vista("/CursosProfesor/ver_curso",$this->datos);
 
     }
 
-    public function ver_profesores() {
+    public function ver_profesores($id_curso) {
 
+        $this->datos["profesores"] = $this->CursoModelo->getProfesores($id_curso);
+
+        //Indica que se ilumina en el menu superior
         $this->datos["menuActivo"] = "profesor";
-        $this->datos["curso"] = true;
 
-        $this->vista("/CursosAdministrador/profesores",$this->datos);
+        $this->datos["cursoactual"]= $id_curso;
+
+        $this->vista("/CursosProfesor/ver_profesores",$this->datos);
 
     }
 
-    public function ver_alumnos() {
+    public function ver_alumnos($id_curso) {
 
+        $this->datos["alumnos"] = $this->CursoModelo->getAlumnos($id_curso);
+
+        //Indica que se ilumina en el menu superior
         $this->datos["menuActivo"] = "alumno";
-        $this->datos["curso"] = true;
 
-        $this->vista("/CursosAdministrador/alumnos",$this->datos);
+        $this->datos["cursoactual"]= $id_curso;
+
+        $this->vista("/CursosProfesor/ver_alumnos",$this->datos);
 
     }
 
-    public function ver_materiales() {
+    public function ver_material($id_material) {
+
+            //Indica que se ilumina en el menu superior
+            $this->datos["menuActivo"] = "curso";
+
+            $this->datos["material"] = $this->CursoModelo->getMaterial($id_material);
+
+            $this->datos["cursoactual"]= $this->CursoModelo->getCursoMaterial($id_material);
+
+            $this->datos["materialRealizado"] = $this->CursoModelo->getAlumnosRealizados($id_material);
+            
+            $this->datos["materialNoRealizado"] = $this->CursoModelo->getAlumnosNoRealizados($id_material);
+
+            $this->vista("/CursosProfesor/ver_material",$this->datos);
+
+    }
+
+    public function add_nota($id_material) {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $nota = $_POST;
+
+            if ($this->CursoModelo->addNotas($nota)) {
+                redireccionar("/curso/ver_material");
+            }else{
+                echo "error";
+            }
+            
+            
+        } 
+    }
+
+    public function get_notas($id_material) {
 
         
 
     }
+
 }
