@@ -41,7 +41,43 @@
     </div>
 </div>
 
+
 <script type='text/javascript'>
+
+    async function rellenarModal($id){
+
+        // Marcamos el boton como cargando ... y lo deshabilitamos
+        let botonGuardar = document.getElementById("guardar");
+        botonGuardar.innerHTML='<span class="spinner-border spinner-border-sm"></span> Loading...';
+        botonGuardar.disabled = true;
+        console.log("hola");
+
+        await fetch(`<?php echo RUTA_URL?>/curso/get_notas/${$id}`, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: 'include'
+        })
+            .then((resp) => resp.json())
+            .then(function(data) {
+
+                console.log("hola");
+                let notas = data
+
+                // Relleno los datos del formulario
+                
+                document.getElementById("linkArchivo").innerHTML = notas.entrega_alumno;
+                document.getElementById("inputNota").value = notas.nota;
+                document.getElementById("inputObservacion").value = notas.observaciones;
+
+                // Activamos de nuevo el boton, despues de un delay
+                setTimeout(() => {
+                    botonGuardar.innerHTML='Guardar'
+                    botonGuardar.disabled = false
+                }, 1000);
+                
+            })
+    }
 
     let modal = document.createElement("div");
     let modalcontenido = document.createElement("div");
@@ -55,20 +91,12 @@
     let inputobservacion = document.createElement("textarea");
     let inputboton = document.createElement("input");
     let modalbotoncerrar = document.createElement("button");
-    let modala = document.createElement("a");
+    let linkarchivo = document.createElement("a");
     let modalh5 = document.createElement("h5");
     let labelnota = document.createElement("label");
     let labelobservacion = document.createElement("label");
     let labelarchivo = document.createElement("label");
     let br = document.createElement("br");
-
-    function rellenarModal($id) {
-
-
-
-        inputobservacion.innerHTML = "";
-
-    }
 
     function generarModal($id, $id_persona, $nombre) {
         
@@ -86,9 +114,10 @@
 
         //Archivo
         labelarchivo.innerHTML = "Archivo";
-        modala.innerHTML = "Holaa";
-        modala.classList.add("fs-6");
-        modala.href = "#";
+        linkarchivo.id = "linkArchivo";
+        linkarchivo.innerHTML = "Holaa";
+        linkarchivo.classList.add("fs-6");
+        linkarchivo.href = "#";
 
         //Form
         ruta_url = <?php echo json_encode(RUTA_URL) ?>;
@@ -107,12 +136,14 @@
         //Inputs
         labelnota.innerHTML = "Nota";
         labelnota.classList.add("mt-2");
+        inputnota.id = "inputNota";
         inputnota.type = "text";
         inputnota.classList.add("form-control");
         inputnota.classList.add("mb-3");
         inputnota.name = "nota";
 
         labelobservacion.innerHTML = "Observaciones";
+        inputobservacion.id = "inputObservacion";
         inputobservacion.classList.add("form-control");
         inputobservacion.classList.add("mb-5");
         inputobservacion.style.height = "100px";
@@ -131,6 +162,7 @@
         inputboton.value = "Guardar";
         inputboton.classList.add("btn");
         inputboton.classList.add("btn-success");
+        inputboton.id = "guardar";
 
         //Footer
         modalfooter.classList.add("modal-footer");
@@ -144,7 +176,7 @@
         modalheader.appendChild(modalbotoncerrar);
         modalbody.appendChild(labelarchivo);
         modalbody.appendChild(br);
-        modalbody.appendChild(modala);
+        modalbody.appendChild(linkarchivo);
         modalbody.appendChild(form);
         form.appendChild(labelnota);
         form.appendChild(inputnota);
@@ -154,36 +186,7 @@
         form.appendChild(input_idmaterial);
         form.appendChild(inputboton);
 
-
-        async function rellenarModal(id_reg_acciones){
-
-// Marcamos el boton como cargando ... y lo deshabilitamos
-let buttonEditar = document.getElementById("buttonEditar")
-buttonEditar.innerHTML='<span class="spinner-border spinner-border-sm"></span> Loading...'
-buttonEditar.disabled = true
-
-await fetch(`<?php echo RUTA_URL?>/asesorias/get_accion/${id_reg_acciones}`, {
-    headers: {
-        "Content-Type": "application/json"
-    },
-    credentials: 'include'
-})
-    .then((resp) => resp.json())
-    .then(function(data) {
-        let accion = data
-
-        // Relleno los datos del formulario
-        document.getElementById("id_reg_acciones").value = id_reg_acciones
-        document.getElementById("accion_edit").value = accion.accion
-
-        // Activamos de nuevo el boton, despues de un delay
-        setTimeout(() => {
-            buttonEditar.innerHTML='Guardar'
-            buttonEditar.disabled = false
-        }, 1000);
-        
-    })
-}
+        rellenarModal($id);
 
         const closeModal = document.querySelector('.btn-close');
 

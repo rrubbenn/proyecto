@@ -50,14 +50,24 @@ class CursoModelo {
         
     }
 
-    public function getMateriales($id_curso){
+    public function getEvaluables($id_curso){
         
-        $this->db->query("SELECT * FROM Material WHERE id_curso = :id_curso");
+        $this->db->query("SELECT * FROM material m INNER JOIN evaluable e WHERE m.id_curso = :id_curso AND m.id_material = e.id_evaluable;");
         
         $this->db->bind(':id_curso',trim($id_curso));
 
         return $this->db->registros();
     }
+
+    public function getNoEvaluables($id_curso){
+        
+        $this->db->query("SELECT * FROM material m INNER JOIN noevaluable n WHERE m.id_curso = :id_curso AND m.id_material = n.id_noevaluable;");
+        
+        $this->db->bind(':id_curso',trim($id_curso));
+
+        return $this->db->registros();
+    }
+
 
     public function getMaterial($id_material) {
 
@@ -144,6 +154,64 @@ class CursoModelo {
 
         
 
+    }
+
+    public function addEvaluable($datos) {
+
+        $this->db->query("INSERT INTO Material(nombre, descripcion, archivo, id_curso)
+                                    VALUES (:nombre, :descripcion, :archivo, :id_curso)");
+
+        $this->db->bind(':nombre',$datos['nombre']);
+        $this->db->bind(':descripcion',$datos['descripcion']);
+        $this->db->bind(':archivo',$datos['archivo']);
+        $this->db->bind(':id_curso',$datos['id_curso']);
+
+        $id_evaluable = $this->db->executeLastId();
+
+        $this->db->query("INSERT INTO Evaluable(id_evaluable)
+                                    VALUES (:id_evaluable)");
+
+        $this->db->bind(':id_evaluable',$id_evaluable);
+
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
+    public function addNoEvaluable($datos) {
+
+        $this->db->query("INSERT INTO Material(nombre, descripcion, archivo, id_curso)
+                                    VALUES (:nombre, :descripcion, :archivo, :id_curso)");
+
+        $this->db->bind(':nombre',$datos['nombre']);
+        $this->db->bind(':descripcion',$datos['descripcion']);
+        $this->db->bind(':archivo',$datos['archivo']);
+        $this->db->bind(':id_curso',$datos['id_curso']);
+
+        $id_noevaluable = $this->db->executeLastId();
+
+        $this->db->query("INSERT INTO noevaluable(id_noevaluable)
+                                    VALUES (:id_noevaluable)");
+
+        $this->db->bind(':id_noevaluable',$id_noevaluable);
+
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
     }
 
 }
