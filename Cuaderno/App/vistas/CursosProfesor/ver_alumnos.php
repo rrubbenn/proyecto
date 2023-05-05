@@ -20,6 +20,7 @@
         <div class="col-2"> 
             <button class="btn btn-link"> <i class="bi bi-person-add fs-1"></i> </button>
         </div>
+        
     </div>
 
     <div class="mt-5">

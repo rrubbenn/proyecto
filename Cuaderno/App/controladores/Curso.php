@@ -33,7 +33,8 @@ class Curso extends Controlador{
 
     public function ver_curso($id_curso){
 
-        $this->datos['materiales']=$this->CursoModelo->getMateriales($id_curso);
+        $this->datos['materialesEvaluables']=$this->CursoModelo->getEvaluables($id_curso);
+        $this->datos['materialesNoEvaluables']=$this->CursoModelo->getNoEvaluables($id_curso);
 
         //Indica que se ilumina en el menu superior
         $this->datos["menuActivo"] = "curso";
@@ -87,6 +88,38 @@ class Curso extends Controlador{
 
     }
 
+    public function add_evaluable($id_curso) {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $material = $_POST;
+
+            if ($this->CursoModelo->addEvaluable($material)) {
+                redireccionar("/curso/ver_curso/".$id_curso);
+            }else{
+                echo "error";
+            }
+            
+        } 
+
+    }
+
+    public function add_noevaluable($id_curso) {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $material = $_POST;
+
+            if ($this->CursoModelo->addNoEvaluable($material)) {
+                redireccionar("/curso/ver_curso/".$id_curso);
+            }else{
+                echo "error";
+            }
+            
+        } 
+
+    }
+
     public function add_nota($id_material) {
 
         if ($_SERVER["REQUEST_METHOD"]=="POST") {
@@ -94,19 +127,19 @@ class Curso extends Controlador{
             $nota = $_POST;
 
             if ($this->CursoModelo->addNotas($nota)) {
-                redireccionar("/curso/ver_material");
+                redireccionar("/curso/ver_material/".$id_material);
             }else{
                 echo "error";
             }
-            
             
         } 
     }
 
     public function get_notas($id_material) {
 
-        
+        $this->datos["notas"] = $this->CursoModelo->getNotas($id_material);
 
     }
+
 
 }

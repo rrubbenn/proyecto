@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1deb5ubuntu1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3306
--- Tiempo de generación: 03-05-2023 a las 12:55:33
--- Versión del servidor: 8.0.30-0ubuntu0.22.04.1
--- Versión de PHP: 8.1.11
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 04-05-2023 a las 15:38:37
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,24 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `cuaderno`
 --
-CREATE DATABASE IF NOT EXISTS `cuaderno` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `cuaderno`;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Alumno`
+-- Estructura de tabla para la tabla `alumno`
 --
 
-CREATE TABLE `Alumno` (
-  `id_alumno` int NOT NULL
+CREATE TABLE `alumno` (
+  `id_alumno` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Alumno`
+-- Volcado de datos para la tabla `alumno`
 --
 
-INSERT INTO `Alumno` (`id_alumno`) VALUES
+INSERT INTO `alumno` (`id_alumno`) VALUES
 (2),
 (5),
 (6),
@@ -57,11 +55,11 @@ INSERT INTO `Alumno` (`id_alumno`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Curso`
+-- Estructura de tabla para la tabla `curso`
 --
 
-CREATE TABLE `Curso` (
-  `id_curso` int NOT NULL,
+CREATE TABLE `curso` (
+  `id_curso` int(11) NOT NULL,
   `nombre` varchar(40) NOT NULL,
   `fecha_inicio` datetime NOT NULL,
   `fecha_fin` datetime NOT NULL,
@@ -69,10 +67,10 @@ CREATE TABLE `Curso` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Curso`
+-- Volcado de datos para la tabla `curso`
 --
 
-INSERT INTO `Curso` (`id_curso`, `nombre`, `fecha_inicio`, `fecha_fin`, `anyo`) VALUES
+INSERT INTO `curso` (`id_curso`, `nombre`, `fecha_inicio`, `fecha_fin`, `anyo`) VALUES
 (1, 'Curso Numero Uno', '2023-04-02 11:56:27', '2023-04-17 11:56:27', '2023-2023'),
 (2, 'Curso Numero Dos', '2021-09-08 11:56:27', '2022-06-21 11:56:27', '2021-2022'),
 (3, 'Curso 1', '2023-01-01 00:00:00', '2023-02-28 00:00:00', '2023'),
@@ -84,39 +82,42 @@ INSERT INTO `Curso` (`id_curso`, `nombre`, `fecha_inicio`, `fecha_fin`, `anyo`) 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Evaluable`
+-- Estructura de tabla para la tabla `evaluable`
 --
 
-CREATE TABLE `Evaluable` (
-  `id_evaluable` int NOT NULL
+CREATE TABLE `evaluable` (
+  `id_evaluable` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Evaluable`
+-- Volcado de datos para la tabla `evaluable`
 --
 
-INSERT INTO `Evaluable` (`id_evaluable`) VALUES
-(2);
+INSERT INTO `evaluable` (`id_evaluable`) VALUES
+(3),
+(11),
+(12);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Material`
+-- Estructura de tabla para la tabla `material`
 --
 
-CREATE TABLE `Material` (
-  `id_material` int NOT NULL,
+CREATE TABLE `material` (
+  `id_material` int(11) NOT NULL,
   `nombre` varchar(40) NOT NULL,
   `descripcion` varchar(500) NOT NULL,
   `archivo` varchar(100) NOT NULL,
-  `id_curso` int NOT NULL
+  `id_curso` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Material`
+-- Volcado de datos para la tabla `material`
 --
 
-INSERT INTO `Material` (`id_material`, `nombre`, `descripcion`, `archivo`, `id_curso`) VALUES
+INSERT INTO `material` (`id_material`, `nombre`, `descripcion`, `archivo`, `id_curso`) VALUES
+(0, 'asd', 'asdasdads', 'PepegaBakery.txt', 2),
 (1, 'archivoprueba1', 'skjfhasdkjfhsadkkfljashdflkjashdflkasjdfhlkasjdfh', 'archivo.png', 1),
 (2, 'pruebacurso2023', 'fsdfsdfsdfsdfsdfsdfdssfdsfdsdfsdffdsfdfdsdffds', 'curso2023.png', 2),
 (3, 'Material 1', 'Descripción del material 1', 'archivo1.pdf', 1),
@@ -133,86 +134,90 @@ INSERT INTO `Material` (`id_material`, `nombre`, `descripcion`, `archivo`, `id_c
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `NoEvaluable`
+-- Estructura de tabla para la tabla `noevaluable`
 --
 
-CREATE TABLE `NoEvaluable` (
-  `id_noevaluable` int NOT NULL
+CREATE TABLE `noevaluable` (
+  `id_noevaluable` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `NoEvaluable`
+-- Volcado de datos para la tabla `noevaluable`
 --
 
-INSERT INTO `NoEvaluable` (`id_noevaluable`) VALUES
-(2);
+INSERT INTO `noevaluable` (`id_noevaluable`) VALUES
+(0),
+(2),
+(4),
+(9),
+(10);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Participar_Alumno`
+-- Estructura de tabla para la tabla `participar_alumno`
 --
 
-CREATE TABLE `Participar_Alumno` (
-  `id_alumno` int NOT NULL,
-  `id_curso` int NOT NULL
+CREATE TABLE `participar_alumno` (
+  `id_alumno` int(11) NOT NULL,
+  `id_curso` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Participar_Alumno`
+-- Volcado de datos para la tabla `participar_alumno`
 --
 
-INSERT INTO `Participar_Alumno` (`id_alumno`, `id_curso`) VALUES
+INSERT INTO `participar_alumno` (`id_alumno`, `id_curso`) VALUES
 (2, 2);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Participar_Profesor`
+-- Estructura de tabla para la tabla `participar_profesor`
 --
 
-CREATE TABLE `Participar_Profesor` (
-  `id_profesor` int NOT NULL,
-  `id_curso` int NOT NULL
+CREATE TABLE `participar_profesor` (
+  `id_profesor` int(11) NOT NULL,
+  `id_curso` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Participar_Profesor`
+-- Volcado de datos para la tabla `participar_profesor`
 --
 
-INSERT INTO `Participar_Profesor` (`id_profesor`, `id_curso`) VALUES
+INSERT INTO `participar_profesor` (`id_profesor`, `id_curso`) VALUES
 (1, 2),
-(4, 2),
 (1, 3),
-(4, 3),
 (1, 4),
+(1, 7),
+(4, 2),
+(4, 3),
 (4, 4),
 (4, 5),
-(4, 6),
-(1, 7);
+(4, 6);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Persona`
+-- Estructura de tabla para la tabla `persona`
 --
 
-CREATE TABLE `Persona` (
-  `id_persona` int NOT NULL,
+CREATE TABLE `persona` (
+  `id_persona` int(11) NOT NULL,
   `dni` varchar(9) DEFAULT NULL,
   `clave` varchar(256) NOT NULL,
   `nombre` varchar(40) NOT NULL,
   `apellidos` varchar(50) NOT NULL,
   `mail` varchar(50) NOT NULL,
-  `telefono` int NOT NULL,
-  `id_rol` int NOT NULL
+  `telefono` int(11) NOT NULL,
+  `id_rol` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Persona`
+-- Volcado de datos para la tabla `persona`
 --
 
-INSERT INTO `Persona` (`id_persona`, `dni`, `clave`, `nombre`, `apellidos`, `mail`, `telefono`, `id_rol`) VALUES
+INSERT INTO `persona` (`id_persona`, `dni`, `clave`, `nombre`, `apellidos`, `mail`, `telefono`, `id_rol`) VALUES
 (1, '12345678W', 'SHA2(\'1234\', 256)', 'Pedro', 'Picapiedra', 'pedro@gmail.com', 123123123, 1),
 (2, '87654321E', '1234', 'Juan', 'Sanchez', 'juan@gmail.com', 567567567, 2),
 (3, '11111111U', '1234', 'Ana', 'Brutus', 'ana@gmail.com', 111111111, 3),
@@ -255,10 +260,10 @@ INSERT INTO `Persona` (`id_persona`, `dni`, `clave`, `nombre`, `apellidos`, `mai
 (40, '65432196', '1234', 'Carmen', 'Gonzalez', 'carmen.gonzalez@example.com', 789654321, 2);
 
 --
--- Disparadores `Persona`
+-- Disparadores `persona`
 --
 DELIMITER $$
-CREATE TRIGGER `tr_insertar_alumno` AFTER INSERT ON `Persona` FOR EACH ROW BEGIN
+CREATE TRIGGER `tr_insertar_alumno` AFTER INSERT ON `persona` FOR EACH ROW BEGIN
   IF NEW.id_rol = 2 THEN
     INSERT INTO Alumno (id_alumno) VALUES (NEW.id_persona);
   END IF;
@@ -266,7 +271,7 @@ END
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `tr_insertar_profesor` AFTER INSERT ON `Persona` FOR EACH ROW BEGIN
+CREATE TRIGGER `tr_insertar_profesor` AFTER INSERT ON `persona` FOR EACH ROW BEGIN
   IF NEW.id_rol = 1 THEN
     INSERT INTO Profesor (id_profesor) VALUES (NEW.id_persona);
   END IF;
@@ -277,18 +282,18 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Profesor`
+-- Estructura de tabla para la tabla `profesor`
 --
 
-CREATE TABLE `Profesor` (
-  `id_profesor` int NOT NULL
+CREATE TABLE `profesor` (
+  `id_profesor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Profesor`
+-- Volcado de datos para la tabla `profesor`
 --
 
-INSERT INTO `Profesor` (`id_profesor`) VALUES
+INSERT INTO `profesor` (`id_profesor`) VALUES
 (1),
 (4),
 (7),
@@ -314,44 +319,46 @@ INSERT INTO `Profesor` (`id_profesor`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Realizar`
+-- Estructura de tabla para la tabla `realizar`
 --
 
-CREATE TABLE `Realizar` (
-  `id_alumno` int NOT NULL,
-  `id_evaluable` int NOT NULL,
-  `entrega_alumno` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+CREATE TABLE `realizar` (
+  `id_alumno` int(11) NOT NULL,
+  `id_evaluable` int(11) NOT NULL,
+  `entrega_alumno` varchar(60) DEFAULT NULL,
   `nota` float NOT NULL,
   `observaciones` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Realizar`
+-- Volcado de datos para la tabla `realizar`
 --
 
-INSERT INTO `Realizar` (`id_alumno`, `id_evaluable`, `entrega_alumno`, `nota`, `observaciones`) VALUES
-(2, 2, '', 7.8, ''),
-(5, 2, NULL, 7, 'Buena nota'),
-(6, 2, NULL, 9, 'dsf'),
-(8, 2, NULL, 2, 'asd'),
-(11, 2, NULL, 2, 'wads');
+INSERT INTO `realizar` (`id_alumno`, `id_evaluable`, `entrega_alumno`, `nota`, `observaciones`) VALUES
+(2, 3, '', 7.8, ''),
+(5, 3, NULL, 7, 'Buena nota'),
+(6, 3, NULL, 9, 'dsf'),
+(8, 3, NULL, 2, 'asd'),
+(11, 3, NULL, 2, 'wads'),
+(14, 3, NULL, 0, 'asd'),
+(18, 3, NULL, 0, 'asdasd');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `Rol`
+-- Estructura de tabla para la tabla `rol`
 --
 
-CREATE TABLE `Rol` (
-  `id_rol` int NOT NULL,
+CREATE TABLE `rol` (
+  `id_rol` int(11) NOT NULL,
   `descripcion` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `Rol`
+-- Volcado de datos para la tabla `rol`
 --
 
-INSERT INTO `Rol` (`id_rol`, `descripcion`) VALUES
+INSERT INTO `rol` (`id_rol`, `descripcion`) VALUES
 (1, 'Profesor'),
 (2, 'Alumno'),
 (3, 'Administrador');
@@ -361,75 +368,75 @@ INSERT INTO `Rol` (`id_rol`, `descripcion`) VALUES
 --
 
 --
--- Indices de la tabla `Alumno`
+-- Indices de la tabla `alumno`
 --
-ALTER TABLE `Alumno`
+ALTER TABLE `alumno`
   ADD PRIMARY KEY (`id_alumno`);
 
 --
--- Indices de la tabla `Curso`
+-- Indices de la tabla `curso`
 --
-ALTER TABLE `Curso`
+ALTER TABLE `curso`
   ADD PRIMARY KEY (`id_curso`);
 
 --
--- Indices de la tabla `Evaluable`
+-- Indices de la tabla `evaluable`
 --
-ALTER TABLE `Evaluable`
+ALTER TABLE `evaluable`
   ADD PRIMARY KEY (`id_evaluable`);
 
 --
--- Indices de la tabla `Material`
+-- Indices de la tabla `material`
 --
-ALTER TABLE `Material`
+ALTER TABLE `material`
   ADD PRIMARY KEY (`id_material`),
   ADD KEY `id_curso` (`id_curso`);
 
 --
--- Indices de la tabla `NoEvaluable`
+-- Indices de la tabla `noevaluable`
 --
-ALTER TABLE `NoEvaluable`
+ALTER TABLE `noevaluable`
   ADD PRIMARY KEY (`id_noevaluable`);
 
 --
--- Indices de la tabla `Participar_Alumno`
+-- Indices de la tabla `participar_alumno`
 --
-ALTER TABLE `Participar_Alumno`
+ALTER TABLE `participar_alumno`
   ADD PRIMARY KEY (`id_alumno`,`id_curso`),
   ADD KEY `id_curso` (`id_curso`);
 
 --
--- Indices de la tabla `Participar_Profesor`
+-- Indices de la tabla `participar_profesor`
 --
-ALTER TABLE `Participar_Profesor`
+ALTER TABLE `participar_profesor`
   ADD PRIMARY KEY (`id_profesor`,`id_curso`),
   ADD KEY `id_curso` (`id_curso`);
 
 --
--- Indices de la tabla `Persona`
+-- Indices de la tabla `persona`
 --
-ALTER TABLE `Persona`
+ALTER TABLE `persona`
   ADD PRIMARY KEY (`id_persona`),
   ADD UNIQUE KEY `dni` (`dni`),
   ADD KEY `id_rol` (`id_rol`);
 
 --
--- Indices de la tabla `Profesor`
+-- Indices de la tabla `profesor`
 --
-ALTER TABLE `Profesor`
+ALTER TABLE `profesor`
   ADD PRIMARY KEY (`id_profesor`);
 
 --
--- Indices de la tabla `Realizar`
+-- Indices de la tabla `realizar`
 --
-ALTER TABLE `Realizar`
+ALTER TABLE `realizar`
   ADD PRIMARY KEY (`id_alumno`,`id_evaluable`),
   ADD KEY `id_evaluable` (`id_evaluable`);
 
 --
--- Indices de la tabla `Rol`
+-- Indices de la tabla `rol`
 --
-ALTER TABLE `Rol`
+ALTER TABLE `rol`
   ADD PRIMARY KEY (`id_rol`);
 
 --
@@ -437,61 +444,61 @@ ALTER TABLE `Rol`
 --
 
 --
--- Filtros para la tabla `Alumno`
+-- Filtros para la tabla `alumno`
 --
-ALTER TABLE `Alumno`
-  ADD CONSTRAINT `Alumno_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `Persona` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `alumno`
+  ADD CONSTRAINT `Alumno_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `persona` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Evaluable`
+-- Filtros para la tabla `evaluable`
 --
-ALTER TABLE `Evaluable`
-  ADD CONSTRAINT `Evaluable_ibfk_1` FOREIGN KEY (`id_evaluable`) REFERENCES `Material` (`id_material`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `evaluable`
+  ADD CONSTRAINT `Evaluable_ibfk_1` FOREIGN KEY (`id_evaluable`) REFERENCES `material` (`id_material`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Material`
+-- Filtros para la tabla `material`
 --
-ALTER TABLE `Material`
-  ADD CONSTRAINT `Material_ibfk_1` FOREIGN KEY (`id_curso`) REFERENCES `Curso` (`id_curso`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `material`
+  ADD CONSTRAINT `Material_ibfk_1` FOREIGN KEY (`id_curso`) REFERENCES `curso` (`id_curso`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `NoEvaluable`
+-- Filtros para la tabla `noevaluable`
 --
-ALTER TABLE `NoEvaluable`
-  ADD CONSTRAINT `NoEvaluable_ibfk_1` FOREIGN KEY (`id_noevaluable`) REFERENCES `Material` (`id_material`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `noevaluable`
+  ADD CONSTRAINT `NoEvaluable_ibfk_1` FOREIGN KEY (`id_noevaluable`) REFERENCES `material` (`id_material`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Participar_Alumno`
+-- Filtros para la tabla `participar_alumno`
 --
-ALTER TABLE `Participar_Alumno`
-  ADD CONSTRAINT `Participar_Alumno_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `Alumno` (`id_alumno`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `Participar_Alumno_ibfk_2` FOREIGN KEY (`id_curso`) REFERENCES `Curso` (`id_curso`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `participar_alumno`
+  ADD CONSTRAINT `Participar_Alumno_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `alumno` (`id_alumno`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Participar_Alumno_ibfk_2` FOREIGN KEY (`id_curso`) REFERENCES `curso` (`id_curso`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Participar_Profesor`
+-- Filtros para la tabla `participar_profesor`
 --
-ALTER TABLE `Participar_Profesor`
-  ADD CONSTRAINT `Participar_Profesor_ibfk_1` FOREIGN KEY (`id_profesor`) REFERENCES `Profesor` (`id_profesor`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `Participar_Profesor_ibfk_2` FOREIGN KEY (`id_curso`) REFERENCES `Curso` (`id_curso`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `participar_profesor`
+  ADD CONSTRAINT `Participar_Profesor_ibfk_1` FOREIGN KEY (`id_profesor`) REFERENCES `profesor` (`id_profesor`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Participar_Profesor_ibfk_2` FOREIGN KEY (`id_curso`) REFERENCES `curso` (`id_curso`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Persona`
+-- Filtros para la tabla `persona`
 --
-ALTER TABLE `Persona`
-  ADD CONSTRAINT `Persona_ibfk_1` FOREIGN KEY (`id_rol`) REFERENCES `Rol` (`id_rol`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `persona`
+  ADD CONSTRAINT `Persona_ibfk_1` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id_rol`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Profesor`
+-- Filtros para la tabla `profesor`
 --
-ALTER TABLE `Profesor`
-  ADD CONSTRAINT `Profesor_ibfk_1` FOREIGN KEY (`id_profesor`) REFERENCES `Persona` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `profesor`
+  ADD CONSTRAINT `Profesor_ibfk_1` FOREIGN KEY (`id_profesor`) REFERENCES `persona` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `Realizar`
+-- Filtros para la tabla `realizar`
 --
-ALTER TABLE `Realizar`
-  ADD CONSTRAINT `Realizar_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `Alumno` (`id_alumno`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `Realizar_ibfk_2` FOREIGN KEY (`id_evaluable`) REFERENCES `Evaluable` (`id_evaluable`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `realizar`
+  ADD CONSTRAINT `Realizar_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `alumno` (`id_alumno`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Realizar_ibfk_2` FOREIGN KEY (`id_evaluable`) REFERENCES `evaluable` (`id_evaluable`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
