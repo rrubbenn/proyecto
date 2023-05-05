@@ -8,6 +8,8 @@
         </ol>
     </nav>
 
+    <?php print_r($datos["material"]); ?>
+
     <div class="row mt-4">
         <div class="col-6">
             <h4 class="mb-4"> Evaluados </h4>
@@ -44,15 +46,13 @@
 
 <script type='text/javascript'>
 
-    async function rellenarModal($id){
+    async function rellenarModal(id){
 
         // Marcamos el boton como cargando ... y lo deshabilitamos
         let botonGuardar = document.getElementById("guardar");
         botonGuardar.innerHTML='<span class="spinner-border spinner-border-sm"></span> Loading...';
-        botonGuardar.disabled = true;
-        console.log("hola");
-
-        await fetch(`<?php echo RUTA_URL?>/curso/get_notas/${$id}`, {
+        //botonGuardar.disabled = true;
+        await fetch(`<?php echo RUTA_URL?>/curso/get_notas/${id}`, {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -61,7 +61,7 @@
             .then((resp) => resp.json())
             .then(function(data) {
 
-                console.log("hola");
+                console.log(data);
                 let notas = data
 
                 // Relleno los datos del formulario
@@ -98,8 +98,10 @@
     let labelarchivo = document.createElement("label");
     let br = document.createElement("br");
 
-    function generarModal($id, $id_persona, $nombre) {
+    function generarModal(id_material, id_persona, nombre) {
         
+        console.log(id_material);
+
         //Modal
         modal.classList.add("modal-manual");
 
@@ -121,7 +123,7 @@
 
         //Form
         ruta_url = <?php echo json_encode(RUTA_URL) ?>;
-        ruta_addnota = "/curso/add_nota/" + $id;
+        ruta_addnota = "/curso/add_notas/" + id_material;
         ruta = ruta_url+ruta_addnota;
         
         form.method = "post";
@@ -150,11 +152,11 @@
         inputobservacion.name = "observacion";
 
         input_idalumno.name = "id_alumno";
-        input_idalumno.value = $id_persona;
+        input_idalumno.value = id_persona;
         input_idalumno.style.display = "none";
 
         input_idmaterial.name = "id_material";
-        input_idmaterial.value = $id;
+        input_idmaterial.value = id_material;
         input_idmaterial.style.display = "none";
 
         //Boton Guardar
@@ -186,7 +188,7 @@
         form.appendChild(input_idmaterial);
         form.appendChild(inputboton);
 
-        rellenarModal($id);
+        rellenarModal(id_material);
 
         const closeModal = document.querySelector('.btn-close');
 
