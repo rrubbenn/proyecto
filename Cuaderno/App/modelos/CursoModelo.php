@@ -71,7 +71,7 @@ class CursoModelo {
 
     public function getMaterial($id_material) {
 
-        $this->db->query("SELECT * FROM Material WHERE id_material = :id_material");
+        $this->db->query("SELECT * FROM material WHERE id_material = :id_material");
 
         $this->db->bind(':id_material',trim($id_material));
 
@@ -102,7 +102,7 @@ class CursoModelo {
 
     public function getCursoMaterial($id_material){
         
-        $this->db->query("SELECT M.id_curso FROM Curso C INNER JOIN Material M WHERE C.id_curso = M.id_curso AND M.id_material = :id_material");
+        $this->db->query("SELECT M.id_curso FROM Curso C INNER JOIN material M WHERE C.id_curso = M.id_curso AND M.id_material = :id_material");
         
         $this->db->bind(':id_material',trim($id_material));
 
@@ -133,21 +133,15 @@ class CursoModelo {
 
     }
 
-    public function getNotas($id_material) {
+    public function getNotas($datos) {
 
-        $this->db->query("SELECT * FROM Realizar WHERE id_evaluable = :id_material");
+        $this->db->query("SELECT * FROM Realizar WHERE id_evaluable = :id_material AND id_alumno = :id_alumno");
 
         $this->db->bind(':id_material',$datos['id_material']);
+        $this->db->bind(':id_alumno',$datos['id_alumno']);
 
-        if($this->db->execute()) {
+        return $this->db->registros();
 
-            return true;
-
-        } else {
-
-            return false;
-
-        }
     }
 
     public function updateNotas($datos) {
@@ -158,7 +152,7 @@ class CursoModelo {
 
     public function addEvaluable($datos) {
 
-        $this->db->query("INSERT INTO Material(nombre, descripcion, archivo, id_curso)
+        $this->db->query("INSERT INTO material(nombre, descripcion, archivo, id_curso)
                                     VALUES (:nombre, :descripcion, :archivo, :id_curso)");
 
         $this->db->bind(':nombre',$datos['nombre']);
@@ -168,7 +162,7 @@ class CursoModelo {
 
         $id_evaluable = $this->db->executeLastId();
 
-        $this->db->query("INSERT INTO Evaluable(id_evaluable)
+        $this->db->query("INSERT INTO evaluable(id_evaluable)
                                     VALUES (:id_evaluable)");
 
         $this->db->bind(':id_evaluable',$id_evaluable);
@@ -187,7 +181,7 @@ class CursoModelo {
 
     public function addNoEvaluable($datos) {
 
-        $this->db->query("INSERT INTO Material(nombre, descripcion, archivo, id_curso)
+        $this->db->query("INSERT INTO material(nombre, descripcion, archivo, id_curso)
                                     VALUES (:nombre, :descripcion, :archivo, :id_curso)");
 
         $this->db->bind(':nombre',$datos['nombre']);
