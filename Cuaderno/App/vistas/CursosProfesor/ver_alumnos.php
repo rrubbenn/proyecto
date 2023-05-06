@@ -17,10 +17,11 @@
                 <button type="submit" class="btn btn-primary"> <i class="bi bi-search"></i> </button>
             </div>
         </div>
-        <div class="col-2"> 
-            <button class="btn btn-link"> <i class="bi bi-person-add fs-1"></i> </button>
-        </div>
-        
+        <?php if($datos['usuarioSesion']->id_rol == 3): ?>
+            <div class="col-2"> 
+                <button class="btn btn-link"> <i class="bi bi-person-add fs-1"></i> </button>
+            </div>
+        <?php endif ?>
     </div>
 
     <div class="mt-5">
@@ -31,7 +32,9 @@
                     <th> Apellidos </th>
                     <th> Mail </th>
                     <th> Teléfono </th>
-                    <th> Acciones </th>
+                    <?php if($datos['usuarioSesion']->id_rol == 3): ?>
+                        <th> Acciones </th>
+                    <?php endif ?>
                 </tr>
                 <?php foreach($datos['alumnos'] as $alumno): ?>
                     <tr>
@@ -39,7 +42,9 @@
                         <td> <?php echo $alumno->apellidos ?> </td>
                         <td> <?php echo $alumno->mail ?> </td>
                         <td> <?php echo $alumno->telefono ?> </td>
-                        <td> <i class="bi bi-pencil-square fs-4"></i> <i class="bi bi-person-dash fs-4"></i> </td>
+                        <?php if($datos['usuarioSesion']->id_rol == 3): ?>
+                            <td> <i class="bi bi-pencil-square fs-4"></i> <i class="bi bi-person-dash fs-4"></i> </td>
+                        <?php endif ?>
                     </tr>
                 <?php endforeach ?>
             </table>
@@ -184,22 +189,6 @@
         form.appendChild(input_idalumno);
         form.appendChild(input_idmaterial);
         form.appendChild(inputboton);
-
-
-        // jQuery.ajax({
-        //     type: "POST",
-        //     url: ruta_url+"/curso/get_notas/"+$id,
-        //     dataType: 'json',
-        //     data: {functionname: 'add', arguments: [1, 2]},
-
-        //     success: function (obj, textstatus) {
-        //         if( !('error' in obj) ) {
-        //             yourVariable = obj.result;
-        //         } else {
-        //             console.log(obj.error);
-        //         }
-        //     }
-        // });
 
         const closeModal = document.querySelector('.btn-close');
 

@@ -120,7 +120,7 @@ class Curso extends Controlador{
 
     }
 
-    public function add_nota($id_material) {
+    public function add_notas($id_material) {
 
         if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
@@ -137,9 +137,18 @@ class Curso extends Controlador{
 
     public function get_notas($id_material) {
 
-        $this->datos["notas"] = $this->CursoModelo->getNotas($id_material);
+        //$this->vistaApi($id_material);
+        $this->vistaApi($this->asesoriaModelo->getNotas($id_material));
 
     }
 
+    public function borrar_material($id_material) {
 
+        if ($this->CursoModelo->borrarMaterial($id_material)) {
+            redireccionar("/curso/ver_curso/".$id_material);
+        }else{
+            echo "error";
+        }
+
+    }
 }

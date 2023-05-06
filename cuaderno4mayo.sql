@@ -26,6 +26,10 @@ SET time_zone = "+00:00";
 --
 -- Estructura de tabla para la tabla `alumno`
 --
+CREATE DATABASE cuaderno;
+
+USE cuaderno;
+
 
 CREATE TABLE `alumno` (
   `id_alumno` int(11) NOT NULL
@@ -377,6 +381,7 @@ ALTER TABLE `alumno`
 -- Indices de la tabla `curso`
 --
 ALTER TABLE `curso`
+  MODIFY `id_curso` INT AUTO_INCREMENT,
   ADD PRIMARY KEY (`id_curso`);
 
 --
@@ -389,6 +394,7 @@ ALTER TABLE `evaluable`
 -- Indices de la tabla `material`
 --
 ALTER TABLE `material`
+  MODIFY `id_material` INT AUTO_INCREMENT,
   ADD PRIMARY KEY (`id_material`),
   ADD KEY `id_curso` (`id_curso`);
 
@@ -416,6 +422,7 @@ ALTER TABLE `participar_profesor`
 -- Indices de la tabla `persona`
 --
 ALTER TABLE `persona`
+  MODIFY `id_persona` INT AUTO_INCREMENT,
   ADD PRIMARY KEY (`id_persona`),
   ADD UNIQUE KEY `dni` (`dni`),
   ADD KEY `id_rol` (`id_rol`);
