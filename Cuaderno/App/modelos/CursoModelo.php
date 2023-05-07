@@ -208,4 +208,43 @@ class CursoModelo {
         }
     }
 
+    public function updateMaterial($datos) {
+
+        $this->db->query("UPDATE material SET nombre = :nombre, descripcion = :descripcion, archivo = :archivo WHERE id_material = :id_material");
+
+        $this->db->bind(':nombre',$datos['nombre']);
+        $this->db->bind(':descripcion',$datos['descripcion']);
+        $this->db->bind(':archivo',$datos['archivo']);
+        $this->db->bind(':id_material',$datos['id_material']);
+
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
+    public function deleteMaterial($datos) {
+
+        $this->db->query("DELETE FROM material WHERE id_material = :id_material");
+        
+        $this->db->bind(':id_material',$datos['id_material']);
+
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
 }

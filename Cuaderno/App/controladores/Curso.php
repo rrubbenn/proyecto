@@ -101,7 +101,6 @@ class Curso extends Controlador{
             }
             
         } 
-
     }
 
     public function add_noevaluable($id_curso) {
@@ -117,7 +116,36 @@ class Curso extends Controlador{
             }
             
         } 
+    }
 
+    public function update_material($id_curso) {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $material = $_POST;
+
+            if ($this->CursoModelo->updateMaterial($material)) {
+                redireccionar("/curso/ver_curso/".$id_curso);
+            }else{
+                echo "error";
+            }
+            
+        } 
+    }
+
+    public function delete_material($id_curso) {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $material = $_POST;
+
+            if ($this->CursoModelo->deleteMaterial($material)) {
+                redireccionar("/curso/ver_curso/".$id_curso);
+            }else{
+                echo "error";
+            }
+            
+        } 
     }
 
     public function add_notas($id_material) {
@@ -135,10 +163,17 @@ class Curso extends Controlador{
         } 
     }
 
-    public function get_notas($id_material) {
+    public function get_notas($datos) {
 
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $info = $_POST;
+
+            $this->vistaApi($info);
+            
+        } 
         //$this->vistaApi($id_material);
-        $this->vistaApi($this->asesoriaModelo->getNotas($id_material));
+        //$this->vistaApi($this->asesoriaModelo->getNotas($datos));
 
     }
 

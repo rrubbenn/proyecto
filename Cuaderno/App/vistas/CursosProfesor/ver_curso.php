@@ -38,10 +38,13 @@
                         <a 
                         class="text-decoration-none text-dark d-flex align-items-center me-3" 
                         href="#"
-                        <?php echo "onclick='generarModalEditar(".$noevaluable->id_material.", false)'" ?>> 
+                        <?php echo "onclick='generarModalEditar(".$noevaluable->id_material.",".$datos['cursoactual'].")'" ?>> 
                             <i class="bi bi-pencil-square fs-4"></i> 
                         </a>
-                        <a class="text-decoration-none text-dark d-flex align-items-center me-3" href="#">
+                        <a 
+                        class="text-decoration-none text-dark d-flex align-items-center me-3" 
+                        href="#"
+                        <?php echo "onclick='generarModalBorrar(".$noevaluable->id_material.",".$datos['cursoactual'].")'" ?>>
                             <i class="bi bi-trash fs-4"></i>
                         </a>
                     <?php endif ?>
@@ -77,10 +80,13 @@
                         <a 
                         class="text-decoration-none text-dark d-flex align-items-center me-3"
                         href="#"
-                        <?php echo "onclick='generarModal(".$evaluable->id_material.", true)'" ?>> 
+                        <?php echo "onclick='generarModalEditar(".$evaluable->id_material.",".$datos['cursoactual'].")'" ?>> 
                             <i class="bi bi-pencil-square fs-4"></i> 
                         </a>
-                        <a class="text-decoration-none text-dark d-flex align-items-center me-3" href="#">
+                        <a 
+                        class="text-decoration-none text-dark d-flex align-items-center me-3" 
+                        href="#"
+                        <?php echo "onclick='generarModalBorrar(".$evaluable->id_material.",".$datos['cursoactual'].")'" ?>>
                             <i class="bi bi-trash fs-4"></i>
                         </a>
                     <?php endif ?>
@@ -156,9 +162,9 @@
     let modalh5 = document.createElement("h5");
     let br = document.createElement("br");
 
-    function generarModal($id, $evaluable) {
+    function generarModal(id_curso, evaluable) {
 
-        console.log($evaluable);
+        console.log(evaluable);
 
     //Modal
     modal.classList.add("modal-manual");
@@ -175,14 +181,13 @@
     //Form
     ruta_url = <?php echo json_encode(RUTA_URL) ?>;
 
-    if ($evaluable == true) {
+    if (evaluable == true) {
 
-        ruta_addnota = "/curso/add_evaluable/"+$id;
+        ruta_addnota = "/curso/add_evaluable/"+id_curso;
 
     } else {
 
-        console.log("HE LLEGAO AL ELSE")
-        ruta_addnota = "/curso/add_noevaluable/"+$id;
+        ruta_addnota = "/curso/add_noevaluable/"+id_curso;
 
     }
     ruta = ruta_url+ruta_addnota;
@@ -216,7 +221,7 @@
     inputdescripcionarchivo.classList.add("mb-4");
     inputdescripcionarchivo.name = "descripcion";
 
-    inputcurso.value = $id;
+    inputcurso.value = id_curso;
     inputcurso.classList.add("d-none");
     inputcurso.name = "id_curso";
 
@@ -276,17 +281,15 @@
     let editarinputnombrearchivo = document.createElement("input");
     let editarlabeldescripcionarchivo = document.createElement("label");
     let editarinputdescripcionarchivo = document.createElement("textarea");
-    let editarinputcurso = document.createElement("input");
+    let editarinputmaterial = document.createElement("input");
     let editarinputboton = document.createElement("input");
     let editarmodalbotoncerrar = document.createElement("button");
     let editarmodalh5 = document.createElement("h5");
     let editarbr = document.createElement("br");
 
 
-    function generarModalEditar($id, $evaluable) {
-
-        console.log($evaluable);
-
+    function generarModalEditar(id_material, id_curso) {
+        
         //Modal
         modaleditar.classList.add("modal-manual");
 
@@ -302,20 +305,12 @@
         //Form
         ruta_url = <?php echo json_encode(RUTA_URL) ?>;
 
-        if ($evaluable == true) {
+        ruta_updatematerial = "/curso/update_material/"+id_curso;
 
-        ruta_addnota = "/curso/add_evaluable/"+$id;
+        ruta = ruta_url+ruta_updatematerial;
 
-        } else {
-
-        console.log("HE LLEGAO AL ELSE")
-        ruta_addnota = "/curso/add_noevaluable/"+$id;
-
-        }
-        ruta = ruta_url+ruta_addnota;
-
-        form.method = "post";
-        form.action = ruta;
+        editarform.method = "post";
+        editarform.action = ruta;
 
         //H5 y botoncerrar
         editarmodalh5.classList.add("fs-6");
@@ -343,9 +338,9 @@
         editarinputdescripcionarchivo.classList.add("mb-4");
         editarinputdescripcionarchivo.name = "descripcion";
 
-        editarinputcurso.value = $id;
-        editarinputcurso.classList.add("d-none");
-        editarinputcurso.name = "id_curso";
+        editarinputmaterial.value = id_material;
+        editarinputmaterial.classList.add("d-none");
+        editarinputmaterial.name = "id_material";
 
         //Boton Guardar
         editarinputboton.type = "submit";
@@ -373,8 +368,10 @@
         editarform.appendChild(editarinputnombrearchivo);
         editarform.appendChild(editarlabeldescripcionarchivo);
         editarform.appendChild(editarinputdescripcionarchivo);
-        editarform.appendChild(editarinputcurso);
+        editarform.appendChild(editarinputmaterial);
         editarform.appendChild(editarinputboton);
+
+        console.log(ruta);
 
         //Cerrar Modal
         const closeModalEditar = document.querySelector('.btn-close');
@@ -398,23 +395,14 @@
     let modalborrarbody = document.createElement("div");
     let modalborrarfooter = document.createElement("div");
     let borrarform = document.createElement("form");
-    let borrarlabelarchivo = document.createElement("label");
-    let borrarinputfile = document.createElement("input");
-    let borrarlabelnombrearchivo = document.createElement("label");
-    let borrarinputnombrearchivo = document.createElement("input");
-    let borrarlabeldescripcionarchivo = document.createElement("label");
-    let borrarinputdescripcionarchivo = document.createElement("textarea");
-    let borrarinputcurso = document.createElement("input");
+    let borrarinputmaterial = document.createElement("input");
     let borrarinputboton = document.createElement("input");
     let borrarmodalbotoncerrar = document.createElement("button");
     let borrarmodalh5 = document.createElement("h5");
-    let borrarbr = document.createElement("br");
 
+    function generarModalBorrar(id_material, id_curso) {
 
-    function generarModalBorrar($id, $evaluable) {
-
-        console.log($evaluable);
-
+        console.log("prueba");
         //Modal
         modalborrar.classList.add("modal-manual");
 
@@ -430,57 +418,30 @@
         //Form
         ruta_url = <?php echo json_encode(RUTA_URL) ?>;
 
-        if ($evaluable == true) {
+        ruta_addnota = "/curso/delete_material/"+id_curso;
 
-        ruta_addnota = "/curso/add_evaluable/"+$id;
-
-        } else {
-
-        console.log("HE LLEGAO AL ELSE")
-        ruta_addnota = "/curso/add_noevaluable/"+$id;
-
-        }
         ruta = ruta_url+ruta_addnota;
 
-        form.method = "post";
-        form.action = ruta;
+        borrarform.method = "post";
+        borrarform.action = ruta;
 
         //H5 y botoncerrar
         borrarmodalh5.classList.add("fs-6");
-        borrarmodalh5.innerHTML = "Subir Material";
+        borrarmodalh5.innerHTML = "Borrar Material";
         borrarmodalbotoncerrar.classList.add("btn-close");
 
         //Inputs
-        borrarlabelnombrearchivo.innerHTML = "Nombre";
-        borrarlabelnombrearchivo.classList.add("mt-2");
-        borrarinputnombrearchivo.id = "inputNombreArchivo";
-        borrarinputnombrearchivo.type = "text";
-        borrarinputnombrearchivo.classList.add("form-control");
-        borrarinputnombrearchivo.classList.add("mb-3");
-        borrarinputnombrearchivo.name = "nombre";
 
-        borrarlabelarchivo.innerHTML = "Archivo";
-        borrarinputfile.type = "file";
-        borrarinputfile.name = "archivo";
-        borrarinputfile.classList.add("mb-3");
-        borrarinputfile.classList.add("mt-2");
-
-        borrarlabeldescripcionarchivo.innerHTML = "Descripción"
-        borrarinputdescripcionarchivo.style.height = "100px";
-        borrarinputdescripcionarchivo.classList.add("form-control");
-        borrarinputdescripcionarchivo.classList.add("mb-4");
-        borrarinputdescripcionarchivo.name = "descripcion";
-
-        borrarinputcurso.value = $id;
-        borrarinputcurso.classList.add("d-none");
-        borrarinputcurso.name = "id_curso";
+        borrarinputmaterial.value = id_material;
+        borrarinputmaterial.classList.add("d-none");
+        borrarinputmaterial.name = "id_material";
 
         //Boton Guardar
         borrarinputboton.type = "submit";
-        borrarinputboton.value = "Guardar";
+        borrarinputboton.value = "Borrar";
         borrarinputboton.classList.add("btn");
-        borrarinputboton.classList.add("btn-success");
-        borrarinputboton.id = "guardar";
+        borrarinputboton.classList.add("btn-danger");
+        borrarinputboton.id = "borrar";
 
         //Footer
         modalborrarfooter.classList.add("modal-footer");
@@ -493,15 +454,8 @@
         modalborrarcontenido.appendChild(modalborrarfooter);
         modalborrarheader.appendChild(borrarmodalh5);
         modalborrarheader.appendChild(borrarmodalbotoncerrar);
-        modalborrarbody.appendChild(borrarbr);
         modalborrarbody.appendChild(borrarform);
-        borrarform.appendChild(borrarlabelarchivo);
-        borrarform.appendChild(borrarinputfile);
-        borrarform.appendChild(borrarlabelnombrearchivo);
-        borrarform.appendChild(borrarinputnombrearchivo);
-        borrarform.appendChild(borrarlabeldescripcionarchivo);
-        borrarform.appendChild(borrarinputdescripcionarchivo);
-        borrarform.appendChild(borrarinputcurso);
+        borrarform.appendChild(borrarinputmaterial);
         borrarform.appendChild(borrarinputboton);
 
         //Cerrar Modal
