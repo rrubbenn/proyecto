@@ -46,17 +46,23 @@
 
 <script type='text/javascript'>
 
-    async function rellenarModal(id){
+    async function rellenarModal(){
+
+        let id_alumno = document.getElementById("id_alumno").value;
+        let id_material = document.getElementById("id_material").value;
+
+        console.log(id_alumno);
+        console.log(id_material);
+
+        const datosForm = new FormData(document.getElementById("formulario"))
 
         // Marcamos el boton como cargando ... y lo deshabilitamos
         let botonGuardar = document.getElementById("guardar");
         botonGuardar.innerHTML='<span class="spinner-border spinner-border-sm"></span> Loading...';
         //botonGuardar.disabled = true;
-        await fetch(`<?php echo RUTA_URL?>/curso/get_notas/${id}`, {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: 'include'
+        await fetch(`<?php echo RUTA_URL?>/curso/get_notas`, {
+            method: "POST",
+            body: datosForm,
         })
             .then((resp) => resp.json())
             .then(function(data) {
@@ -126,6 +132,7 @@
         ruta_addnota = "/curso/add_notas/" + id_material;
         ruta = ruta_url+ruta_addnota;
         
+        form.id = "formulario";
         form.method = "post";
         form.action = ruta;
 
@@ -151,10 +158,12 @@
         inputobservacion.style.height = "100px";
         inputobservacion.name = "observacion";
 
+        input_idalumno.id = "id_alumno";
         input_idalumno.name = "id_alumno";
         input_idalumno.value = id_persona;
         input_idalumno.style.display = "none";
 
+        input_idmaterial.id = "id_material";
         input_idmaterial.name = "id_material";
         input_idmaterial.value = id_material;
         input_idmaterial.style.display = "none";
