@@ -1,5 +1,7 @@
 <?php require_once RUTA_APP.'/vistas/inc/header_curso.php'; ?>
 
+<?php print_r($datos['usuarioSesion']); ?>
+
 
 <div class="container">
 
@@ -17,15 +19,17 @@
     </div>
 
     <div id="divContenido" class="mt-5 d-block">
-        <div class="row mb-4">
-            <button 
-            id="addNoEntregable" 
-            class="col-2 btn btn-primary d-flex align-items-center" 
-            <?php echo "onclick='generarModal(".$datos['cursoactual'].", false)'" ?> > 
-                <i class="bi bi-file-earmark-plus fs-3"></i> &nbsp &nbsp &nbsp
-                Añadir material
-            </button>
-        </div>
+        <?php if ($datos['usuarioSesion']->id_rol == 1  ): ?>
+            <div class="row mb-4">
+                <button 
+                id="addNoEntregable" 
+                class="col-2 btn btn-primary d-flex align-items-center" 
+                <?php echo "onclick='generarModal(".$datos['cursoactual'].", false)'" ?> > 
+                    <i class="bi bi-file-earmark-plus fs-3"></i> &nbsp &nbsp &nbsp
+                    Añadir material
+                </button>
+            </div>
+        <?php endif ?>
         <div class="row col-12">
             <?php foreach($datos["materialesNoEvaluables"] as $noevaluable): ?>
                 <div class="col-11">
@@ -35,6 +39,12 @@
                 </div>
                 <div class="col-1 d-flex justify-content-end">
                     <?php if($datos['usuarioSesion']->id_rol == 1 ): ?>
+                        <a 
+                        class="text-decoration-none text-dark d-flex align-items-center me-3" 
+                        href="#"
+                        <?php echo "onclick='generarModalVer(".$noevaluable->id_material.",".$datos['cursoactual'].")'" ?>>
+                            <i class="bi bi-eye fs-4"></i>
+                        </a>
                         <a 
                         class="text-decoration-none text-dark d-flex align-items-center me-3" 
                         href="#"
@@ -48,9 +58,6 @@
                             <i class="bi bi-trash fs-4"></i>
                         </a>
                     <?php endif ?>
-                    <a class="text-decoration-none text-dark d-flex align-items-center" href="#"> 
-                        <i class="bi bi-download fs-4"></i>
-                    </a>
                 </div>
                 <hr>
             <?php endforeach ?>
@@ -58,15 +65,18 @@
     </div>
 
     <div id="divEntregables" class="mt-5 d-none">
-        <div class="row mb-4">
-            <button 
-            id="addEntregable" 
-            class="col-2 btn btn-primary d-flex align-items-center"
-            <?php echo "onclick='generarModal(".$datos['cursoactual'].", true)'" ?>> 
-                <i class="bi bi-file-earmark-plus fs-3"></i> &nbsp &nbsp &nbsp
-                Añadir material
-            </button>
-        </div>
+        <?php if ($datos['usuarioSesion']->id_rol == 1): ?>
+            <div class="row mb-4">
+                <button 
+                id="addEntregable" 
+                class="col-2 btn btn-primary d-flex align-items-center"
+                <?php echo "onclick='generarModal(".$datos['cursoactual'].", true)'" ?>> 
+                    <i class="bi bi-file-earmark-plus fs-3"></i> &nbsp &nbsp &nbsp
+                    Añadir material
+                </button>
+            </div>
+        <?php endif ?>
+
         <div class="row col-12">
             <?php foreach($datos["materialesEvaluables"] as $evaluable): ?>
                 
@@ -77,6 +87,12 @@
                 </div>
                 <div class="col-1 d-flex justify-content-end">
                     <?php if($datos['usuarioSesion']->id_rol == 1 ): ?>
+                        <a 
+                        class="text-decoration-none text-dark d-flex align-items-center me-3" 
+                        href="#"
+                        <?php echo "onclick='generarModalVer(".$evaluable->id_material.",".$datos['cursoactual'].")'" ?>>
+                            <i class="bi bi-eye fs-4"></i>
+                        </a>
                         <a 
                         class="text-decoration-none text-dark d-flex align-items-center me-3"
                         href="#"
@@ -90,9 +106,7 @@
                             <i class="bi bi-trash fs-4"></i>
                         </a>
                     <?php endif ?>
-                    <a class="text-decoration-none text-dark d-flex align-items-center" href="#"> 
-                        <i class="bi bi-download fs-4"></i>
-                    </a>
+                    
                 </div>
                 <hr>
             <?php endforeach ?>
@@ -102,6 +116,8 @@
 </div>
 
 <script type="text/javascript"> 
+
+    
 
     function mostrarContenido() {
 
@@ -150,12 +166,10 @@
     let modalbody = document.createElement("div");
     let modalfooter = document.createElement("div");
     let form = document.createElement("form");
-    let labelarchivo = document.createElement("label");
-    let inputfile = document.createElement("input");
-    let labelnombrearchivo = document.createElement("label");
-    let inputnombrearchivo = document.createElement("input");
-    let labeldescripcionarchivo = document.createElement("label");
-    let inputdescripcionarchivo = document.createElement("textarea");
+    let labelnombretarea = document.createElement("label");
+    let inputnombretarea = document.createElement("input");
+    let labeldescripciontarea = document.createElement("label");
+    let inputdescripciontarea = document.createElement("textarea");
     let inputcurso = document.createElement("input");
     let inputboton = document.createElement("input");
     let modalbotoncerrar = document.createElement("button");
@@ -164,105 +178,95 @@
 
     function generarModal(id_curso, evaluable) {
 
-        console.log(evaluable);
+        //Modal
+        modal.classList.add("modal-manual");
 
-    //Modal
-    modal.classList.add("modal-manual");
+        //Contenido
+        modalcontenido.classList.add("modal-contenido");
 
-    //Contenido
-    modalcontenido.classList.add("modal-contenido");
+        //Header
+        modalheader.classList.add("modal-header");
 
-    //Header
-    modalheader.classList.add("modal-header");
+        //Body
+        modalbody.classList.add("modal-body");
+        
+        //Form
+        ruta_url = <?php echo json_encode(RUTA_URL) ?>;
 
-    //Body
-    modalbody.classList.add("modal-body");
-    
-    //Form
-    ruta_url = <?php echo json_encode(RUTA_URL) ?>;
+        if (evaluable == true) {
 
-    if (evaluable == true) {
+            ruta_addnota = "/curso/add_evaluable/"+id_curso;
 
-        ruta_addnota = "/curso/add_evaluable/"+id_curso;
+        } else {
 
-    } else {
+            ruta_addnota = "/curso/add_noevaluable/"+id_curso;
 
-        ruta_addnota = "/curso/add_noevaluable/"+id_curso;
+        }
+        ruta = ruta_url+ruta_addnota;
 
-    }
-    ruta = ruta_url+ruta_addnota;
+        form.method = "post";
+        form.action = ruta;
 
-    form.method = "post";
-    form.action = ruta;
+        //H5 y botoncerrar
+        modalh5.classList.add("fs-6");
+        modalh5.innerHTML = "Subir Material";
+        modalbotoncerrar.classList.add("btn-close");
 
-    //H5 y botoncerrar
-    modalh5.classList.add("fs-6");
-    modalh5.innerHTML = "Subir Material";
-    modalbotoncerrar.classList.add("btn-close");
+        //Inputs
+        labelnombretarea.innerHTML = "Nombre";
+        inputnombretarea.id = "inputnombretarea";
+        inputnombretarea.type = "text";
+        inputnombretarea.classList.add("form-control");
+        inputnombretarea.classList.add("mb-3");
+        inputnombretarea.name = "nombre";
 
-    //Inputs
-    labelnombrearchivo.innerHTML = "Nombre";
-    labelnombrearchivo.classList.add("mt-2");
-    inputnombrearchivo.id = "inputNombreArchivo";
-    inputnombrearchivo.type = "text";
-    inputnombrearchivo.classList.add("form-control");
-    inputnombrearchivo.classList.add("mb-3");
-    inputnombrearchivo.name = "nombre";
+        labeldescripciontarea.innerHTML = "Descripción";
+        inputdescripciontarea.id = "inputdescripciontarea";
+        inputdescripciontarea.style.height = "100px";
+        inputdescripciontarea.classList.add("form-control");
+        inputdescripciontarea.classList.add("mb-4");
+        inputdescripciontarea.name = "descripcion";
 
-    labelarchivo.innerHTML = "Archivo";
-    inputfile.type = "file";
-    inputfile.name = "archivo";
-    inputfile.classList.add("mb-3");
-    inputfile.classList.add("mt-2");
+        inputcurso.value = id_curso;
+        inputcurso.classList.add("d-none");
+        inputcurso.name = "id_curso";
 
-    labeldescripcionarchivo.innerHTML = "Descripción"
-    inputdescripcionarchivo.style.height = "100px";
-    inputdescripcionarchivo.classList.add("form-control");
-    inputdescripcionarchivo.classList.add("mb-4");
-    inputdescripcionarchivo.name = "descripcion";
+        //Boton Guardar
+        inputboton.type = "submit";
+        inputboton.value = "Guardar";
+        inputboton.classList.add("btn");
+        inputboton.classList.add("btn-success");
+        inputboton.id = "guardar";
 
-    inputcurso.value = id_curso;
-    inputcurso.classList.add("d-none");
-    inputcurso.name = "id_curso";
+        //Footer
+        modalfooter.classList.add("modal-footer");
 
-    //Boton Guardar
-    inputboton.type = "submit";
-    inputboton.value = "Guardar";
-    inputboton.classList.add("btn");
-    inputboton.classList.add("btn-success");
-    inputboton.id = "guardar";
+        //Appends
+        document.body.appendChild(modal);
+        modal.appendChild(modalcontenido);
+        modalcontenido.appendChild(modalheader);
+        modalcontenido.appendChild(modalbody);
+        modalcontenido.appendChild(modalfooter);
+        modalheader.appendChild(modalh5);
+        modalheader.appendChild(modalbotoncerrar);
+        modalbody.appendChild(br);
+        modalbody.appendChild(form);
+        form.appendChild(labelnombretarea);
+        form.appendChild(inputnombretarea);
+        form.appendChild(labeldescripciontarea);
+        form.appendChild(inputdescripciontarea);
+        form.appendChild(inputcurso);
+        form.appendChild(inputboton);
 
-    //Footer
-    modalfooter.classList.add("modal-footer");
+        //Cerrar Modal
+        const closeModal = document.querySelector('.btn-close');
 
-    //Appends
-    document.body.appendChild(modal);
-    modal.appendChild(modalcontenido);
-    modalcontenido.appendChild(modalheader);
-    modalcontenido.appendChild(modalbody);
-    modalcontenido.appendChild(modalfooter);
-    modalheader.appendChild(modalh5);
-    modalheader.appendChild(modalbotoncerrar);
-    modalbody.appendChild(br);
-    modalbody.appendChild(form);
-    form.appendChild(labelarchivo);
-    form.appendChild(inputfile);
-    form.appendChild(labelnombrearchivo);
-    form.appendChild(inputnombrearchivo);
-    form.appendChild(labeldescripcionarchivo);
-    form.appendChild(inputdescripcionarchivo);
-    form.appendChild(inputcurso);
-    form.appendChild(inputboton);
+        closeModal.addEventListener('click', (e)=> {
 
-    //Cerrar Modal
-    const closeModal = document.querySelector('.btn-close');
+            e.preventDefault();
+            modal.remove();
 
-    closeModal.addEventListener('click', (e)=> {
-
-        e.preventDefault();
-        modal.remove();
-
-    });
+        });
 
     }
 
@@ -275,12 +279,10 @@
     let modaleditarbody = document.createElement("div");
     let modaleditarfooter = document.createElement("div");
     let editarform = document.createElement("form");
-    let editarlabelarchivo = document.createElement("label");
-    let editarinputfile = document.createElement("input");
-    let editarlabelnombrearchivo = document.createElement("label");
-    let editarinputnombrearchivo = document.createElement("input");
-    let editarlabeldescripcionarchivo = document.createElement("label");
-    let editarinputdescripcionarchivo = document.createElement("textarea");
+    let editarlabelnombretarea = document.createElement("label");
+    let editarinputnombretarea = document.createElement("input");
+    let editarlabeldescripciontarea = document.createElement("label");
+    let editarinputdescripciontarea = document.createElement("textarea");
     let editarinputmaterial = document.createElement("input");
     let editarinputboton = document.createElement("input");
     let editarmodalbotoncerrar = document.createElement("button");
@@ -311,6 +313,7 @@
 
         editarform.method = "post";
         editarform.action = ruta;
+        editarform.id = "formulario";
 
         //H5 y botoncerrar
         editarmodalh5.classList.add("fs-6");
@@ -318,25 +321,20 @@
         editarmodalbotoncerrar.classList.add("btn-close");
 
         //Inputs
-        editarlabelnombrearchivo.innerHTML = "Nombre";
-        editarlabelnombrearchivo.classList.add("mt-2");
-        editarinputnombrearchivo.id = "inputNombreArchivo";
-        editarinputnombrearchivo.type = "text";
-        editarinputnombrearchivo.classList.add("form-control");
-        editarinputnombrearchivo.classList.add("mb-3");
-        editarinputnombrearchivo.name = "nombre";
+        editarlabelnombretarea.innerHTML = "Nombre";
+        editarlabelnombretarea.classList.add("mt-2");
+        editarinputnombretarea.id = "inputnombretarea";
+        editarinputnombretarea.type = "text";
+        editarinputnombretarea.classList.add("form-control");
+        editarinputnombretarea.classList.add("mb-3");
+        editarinputnombretarea.name = "nombre";
 
-        editarlabelarchivo.innerHTML = "Archivo";
-        editarinputfile.type = "file";
-        editarinputfile.name = "archivo";
-        editarinputfile.classList.add("mb-3");
-        editarinputfile.classList.add("mt-2");
-
-        editarlabeldescripcionarchivo.innerHTML = "Descripción"
-        editarinputdescripcionarchivo.style.height = "100px";
-        editarinputdescripcionarchivo.classList.add("form-control");
-        editarinputdescripcionarchivo.classList.add("mb-4");
-        editarinputdescripcionarchivo.name = "descripcion";
+        editarlabeldescripciontarea.innerHTML = "Descripción";
+        editarinputdescripciontarea.id = "inputdescripciontarea";
+        editarinputdescripciontarea.style.height = "100px";
+        editarinputdescripciontarea.classList.add("form-control");
+        editarinputdescripciontarea.classList.add("mb-4");
+        editarinputdescripciontarea.name = "descripcion";
 
         editarinputmaterial.value = id_material;
         editarinputmaterial.classList.add("d-none");
@@ -362,16 +360,14 @@
         modaleditarheader.appendChild(editarmodalbotoncerrar);
         modaleditarbody.appendChild(editarbr);
         modaleditarbody.appendChild(editarform);
-        editarform.appendChild(editarlabelarchivo);
-        editarform.appendChild(editarinputfile);
-        editarform.appendChild(editarlabelnombrearchivo);
-        editarform.appendChild(editarinputnombrearchivo);
-        editarform.appendChild(editarlabeldescripcionarchivo);
-        editarform.appendChild(editarinputdescripcionarchivo);
+        editarform.appendChild(editarlabelnombretarea);
+        editarform.appendChild(editarinputnombretarea);
+        editarform.appendChild(editarlabeldescripciontarea);
+        editarform.appendChild(editarinputdescripciontarea);
         editarform.appendChild(editarinputmaterial);
         editarform.appendChild(editarinputboton);
 
-        console.log(ruta);
+        rellenarModal();
 
         //Cerrar Modal
         const closeModalEditar = document.querySelector('.btn-close');
@@ -383,6 +379,164 @@
 
         });
 
+    }
+
+    async function rellenarModal(){
+
+        const datosForm = new FormData(document.getElementById("formulario"))
+
+        await fetch(`<?php echo RUTA_URL?>/curso/get_datosmaterial`, {
+            method: "POST",
+            body: datosForm,
+        })
+            .then((resp) => resp.json())
+            .then(function(data) {
+
+                let datosmaterial = data;
+
+                if(datosmaterial == "") {
+
+                    // Relleno los datos del formulario
+                    document.getElementById("inputnombretarea").value = "";
+                    document.getElementById("inputdescripciontarea").value = "";
+
+                } else {
+
+                    // Relleno los datos del formulario
+                    document.getElementById("inputnombretarea").value = datosmaterial.nombre;
+                    document.getElementById("inputdescripciontarea").value = datosmaterial.descripcion;
+
+                }
+                
+            })
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //MODAL VER MATERIAL
+    let modalver = document.createElement("div");
+    let modalvercontenido = document.createElement("div");
+    let modalverheader = document.createElement("div");
+    let modalverbody = document.createElement("div");
+    let modalverfooter = document.createElement("div");
+    let verform = document.createElement("form");
+    let verlabelnombretarea = document.createElement("label");
+    let verinputnombretarea = document.createElement("input");
+    let verlabeldescripciontarea = document.createElement("label");
+    let verinputdescripciontarea = document.createElement("textarea");
+    let verinputmaterial = document.createElement("input");
+    let verinputboton = document.createElement("input");
+    let vermodalbotoncerrar = document.createElement("button");
+    let vermodalh5 = document.createElement("h5");
+    let verbr = document.createElement("br");
+
+
+    function generarModalVer(id_material, id_curso) {
+        
+        //Modal
+        modalver.classList.add("modal-manual");
+
+        //Contenido
+        modalvercontenido.classList.add("modal-contenido");
+
+        //Header
+        modalverheader.classList.add("modal-header");
+
+        //Body
+        modalverbody.classList.add("modal-body");
+
+        //Form
+
+        verform.id = "formulario";
+
+        //H5 y botoncerrar
+        vermodalh5.classList.add("fs-6");
+        vermodalh5.innerHTML = "Ver Material";
+        vermodalbotoncerrar.classList.add("btn-close");
+
+        //Inputs
+        verlabelnombretarea.innerHTML = "Nombre";
+        verlabelnombretarea.classList.add("mt-2");
+        verinputnombretarea.id = "inputnombretarea";
+        verinputnombretarea.readOnly = true;
+        verinputnombretarea.type = "text";
+        verinputnombretarea.classList.add("form-control");
+        verinputnombretarea.classList.add("mb-3");
+        verinputnombretarea.name = "nombre";
+
+        verlabeldescripciontarea.innerHTML = "Descripción";
+        verinputdescripciontarea.id = "inputdescripciontarea";
+        verinputdescripciontarea.readOnly = true; 
+        verinputdescripciontarea.style.height = "100px";
+        verinputdescripciontarea.classList.add("form-control");
+        verinputdescripciontarea.classList.add("mb-4");
+        verinputdescripciontarea.name = "descripcion";
+
+        verinputmaterial.value = id_material;
+        verinputmaterial.classList.add("d-none");
+        verinputmaterial.name = "id_material";
+
+        //Footer
+        modalverfooter.classList.add("modal-footer");
+
+        //Appends
+        document.body.appendChild(modalver);
+        modalver.appendChild(modalvercontenido);
+        modalvercontenido.appendChild(modalverheader);
+        modalvercontenido.appendChild(modalverbody);
+        modalvercontenido.appendChild(modalverfooter);
+        modalverheader.appendChild(vermodalh5);
+        modalverheader.appendChild(vermodalbotoncerrar);
+        modalverbody.appendChild(verbr);
+        modalverbody.appendChild(verform);
+        verform.appendChild(verlabelnombretarea);
+        verform.appendChild(verinputnombretarea);
+        verform.appendChild(verlabeldescripciontarea);
+        verform.appendChild(verinputdescripciontarea);
+        verform.appendChild(verinputmaterial);
+
+        rellenarModalVer();
+
+        //Cerrar Modal
+        const closeModalVer = document.querySelector('.btn-close');
+
+        closeModalVer.addEventListener('click', (e)=> {
+
+            e.preventDefault();
+            modalver.remove();
+
+        });
+
+    }
+
+    async function rellenarModalVer(){
+
+        const datosForm = new FormData(document.getElementById("formulario"))
+
+        await fetch(`<?php echo RUTA_URL?>/curso/get_datosmaterial`, {
+            method: "POST",
+            body: datosForm,
+        })
+            .then((resp) => resp.json())
+            .then(function(data) {
+
+                let datosmaterial = data;
+
+                if(datosmaterial == "") {
+
+                    // Relleno los datos del formulario
+                    document.getElementById("inputnombretarea").value = "";
+                    document.getElementById("inputdescripciontarea").value = "";
+
+                } else {
+
+                    // Relleno los datos del formulario
+                    document.getElementById("inputnombretarea").value = datosmaterial.nombre;
+                    document.getElementById("inputdescripciontarea").value = datosmaterial.descripcion;
+
+                }
+                
+            })
     }
 
 
@@ -402,7 +556,6 @@
 
     function generarModalBorrar(id_material, id_curso) {
 
-        console.log("prueba");
         //Modal
         modalborrar.classList.add("modal-manual");
 
