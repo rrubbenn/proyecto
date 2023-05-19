@@ -35,6 +35,15 @@
                             <a class="nav-link" href="<?php echo RUTA_URL ?>/curso/">Cursos</a>
                         <?php endif ?>
                     </li>
+                    <?php if($datos["usuarioSesion"]->id_rol == 3): ?>
+                        <li class="nav-item">
+                        <?php if (isset($datos['menuActivo']) && $datos['menuActivo'] == 'usuarios' ): ?>
+                            <a class="nav-link active" href="<?php echo RUTA_URL ?>/usuario/">Usuarios</a>
+                        <?php else: ?>
+                            <a class="nav-link" href="<?php echo RUTA_URL ?>/usuario/">Usuarios</a>
+                        <?php endif ?>
+                    </li>
+                    <?php endif ?>
                 </ul>
 
 
