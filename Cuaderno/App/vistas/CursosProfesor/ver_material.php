@@ -1,5 +1,8 @@
 <?php require_once RUTA_APP.'/vistas/inc/header_curso.php'; ?>
 
+
+<?php print_r($datos['usuarioSesion']); ?>
+
 <div class="container">
 
     <nav aria-label="breadcrumb">
@@ -8,20 +11,26 @@
         </ol>
     </nav>
 
-    <?php print_r($datos["material"]); ?>
-
     <div class="row mt-4">
         <div class="col-6">
             <h4 class="mb-4"> Evaluados </h4>
             <div class="row">
                 <?php foreach($datos["materialRealizado"] as $alumno): ?>
                     <p class="col-10"> <?php echo $alumno->nombre ?>  </p>
-                    <button 
-                    type="button" 
-                    class="btn btn-primary col-1" 
-                    <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.")'" ?>> 
-                        <i class="bi bi-pencil-square"></i> 
-                    </button>
+                    <?php if($datos['usuarioSesion']->id_rol == 1): ?>
+                        <button 
+                        type="button" 
+                        class="btn btn-primary col-1" 
+                        <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.")'" ?>> 
+                            <i class="bi bi-pencil-square"></i> 
+                        </button>
+                        <button 
+                        type="button" 
+                        class="btn btn-primary col-1"
+                        <?php echo "onclick='generarModalVer(".$datos["material"]->id_material.",".$alumno->id_persona.")'" ?>>
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    <?php endif ?>
                 <?php endforeach ?>
             </div> 
         </div>
@@ -31,12 +40,14 @@
                 <div class="row">
                     <?php foreach($datos["materialNoRealizado"] as $alumno): ?>
                         <p class="col-10"> <?php echo $alumno->nombre ?> </p>
-                        <button 
-                        type="button" 
-                        class="btn btn-primary col-1" 
-                        <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.")'" ?>> 
-                            <i class="bi bi-pencil-square"></i> 
-                        </button>
+                        <?php if($datos['usuarioSesion']->id_rol == 1): ?>
+                            <button 
+                            type="button" 
+                            class="btn btn-primary col-1" 
+                            <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.")'" ?>> 
+                                <i class="bi bi-pencil-square"></i> 
+                            </button>
+                        <?php endif ?>
                     <?php endforeach ?> 
                 </div>
         </div>
@@ -48,18 +59,8 @@
 
     async function rellenarModal(){
 
-        let id_alumno = document.getElementById("id_alumno").value;
-        let id_material = document.getElementById("id_material").value;
+        const datosForm = new FormData(document.getElementById("formulario"));
 
-        console.log(id_alumno);
-        console.log(id_material);
-
-        const datosForm = new FormData(document.getElementById("formulario"))
-
-        // Marcamos el boton como cargando ... y lo deshabilitamos
-        let botonGuardar = document.getElementById("guardar");
-        botonGuardar.innerHTML='<span class="spinner-border spinner-border-sm"></span> Loading...';
-        //botonGuardar.disabled = true;
         await fetch(`<?php echo RUTA_URL?>/curso/get_notas`, {
             method: "POST",
             body: datosForm,
@@ -67,20 +68,21 @@
             .then((resp) => resp.json())
             .then(function(data) {
 
-                console.log(data);
                 let notas = data
 
-                // Relleno los datos del formulario
-                
-                document.getElementById("linkArchivo").innerHTML = notas.entrega_alumno;
-                document.getElementById("inputNota").value = notas.nota;
-                document.getElementById("inputObservacion").value = notas.observaciones;
+                if(notas == "") {
 
-                // Activamos de nuevo el boton, despues de un delay
-                setTimeout(() => {
-                    botonGuardar.innerHTML='Guardar'
-                    botonGuardar.disabled = false
-                }, 1000);
+                    // Relleno los datos del formulario
+                    document.getElementById("inputNota").value = "";
+                    document.getElementById("inputObservacion").value = "";
+
+                } else {
+
+                    // Relleno los datos del formulario
+                    document.getElementById("inputNota").value = notas.nota;
+                    document.getElementById("inputObservacion").value = notas.observaciones;
+
+                }
                 
             })
     }
@@ -97,16 +99,12 @@
     let inputobservacion = document.createElement("textarea");
     let inputboton = document.createElement("input");
     let modalbotoncerrar = document.createElement("button");
-    let linkarchivo = document.createElement("a");
     let modalh5 = document.createElement("h5");
     let labelnota = document.createElement("label");
     let labelobservacion = document.createElement("label");
-    let labelarchivo = document.createElement("label");
     let br = document.createElement("br");
 
-    function generarModal(id_material, id_persona, nombre) {
-        
-        console.log(id_material);
+    function generarModal(id_material, id_persona) {
 
         //Modal
         modal.classList.add("modal-manual");
@@ -119,13 +117,6 @@
 
         //Body
         modalbody.classList.add("modal-body");
-
-        //Archivo
-        labelarchivo.innerHTML = "Archivo";
-        linkarchivo.id = "linkArchivo";
-        linkarchivo.innerHTML = "Holaa";
-        linkarchivo.classList.add("fs-6");
-        linkarchivo.href = "#";
 
         //Form
         ruta_url = <?php echo json_encode(RUTA_URL) ?>;
@@ -144,7 +135,7 @@
 
         //Inputs
         labelnota.innerHTML = "Nota";
-        labelnota.classList.add("mt-2");
+        labelnota.classList.add("form-label");
         inputnota.id = "inputNota";
         inputnota.type = "text";
         inputnota.classList.add("form-control");
@@ -152,6 +143,7 @@
         inputnota.name = "nota";
 
         labelobservacion.innerHTML = "Observaciones";
+        labelobservacion.classList.add("form-label");
         inputobservacion.id = "inputObservacion";
         inputobservacion.classList.add("form-control");
         inputobservacion.classList.add("mb-5");
@@ -185,9 +177,7 @@
         modalcontenido.appendChild(modalfooter);
         modalheader.appendChild(modalh5);
         modalheader.appendChild(modalbotoncerrar);
-        modalbody.appendChild(labelarchivo);
         modalbody.appendChild(br);
-        modalbody.appendChild(linkarchivo);
         modalbody.appendChild(form);
         form.appendChild(labelnota);
         form.appendChild(inputnota);
@@ -197,7 +187,7 @@
         form.appendChild(input_idmaterial);
         form.appendChild(inputboton);
 
-        rellenarModal(id_material);
+        rellenarModal();
 
         const closeModal = document.querySelector('.btn-close');
 
@@ -208,6 +198,135 @@
 
         });
 
+    }
+
+    async function rellenarModalVer(){
+
+        const datosForm = new FormData(document.getElementById("formulario"))
+
+        await fetch(`<?php echo RUTA_URL?>/curso/get_notas`, {
+            method: "POST",
+            body: datosForm,
+        })
+            .then((resp) => resp.json())
+            .then(function(data) {
+
+                let notas = data
+
+                if(notas == "") {
+
+                    // Relleno los datos del formulario
+                    document.getElementById("inputNota").value = "";
+                    document.getElementById("inputObservacion").value = "";
+
+                } else {
+
+                    // Relleno los datos del formulario
+                    document.getElementById("inputNota").value = notas.nota;
+                    document.getElementById("inputObservacion").value = notas.observaciones;
+
+                }
+            })
+    }
+
+    let vermodal = document.createElement("div");
+    let vermodalcontenido = document.createElement("div");
+    let vermodalheader = document.createElement("div");
+    let vermodalbody = document.createElement("div");
+    let vermodalfooter = document.createElement("div");
+    let verform = document.createElement("form");
+    let verinput_idalumno = document.createElement("input");
+    let verinput_idmaterial = document.createElement("input");
+    let verinputnota = document.createElement("input");
+    let verinputobservacion = document.createElement("textarea");
+    let verinputboton = document.createElement("input");
+    let vermodalbotoncerrar = document.createElement("button");
+    let vermodalh5 = document.createElement("h5");
+    let verlabelnota = document.createElement("label");
+    let verlabelobservacion = document.createElement("label");
+    let verbr = document.createElement("br");
+
+    function generarModalVer(id_material, id_persona) {
+
+        //Modal
+        vermodal.classList.add("modal-manual");
+
+        //Contenido
+        vermodalcontenido.classList.add("modal-contenido");
+
+        //Header
+        vermodalheader.classList.add("modal-header");
+
+        //Body
+        vermodalbody.classList.add("modal-body");
+
+        //Form
+        verform.id = "formulario";
+
+        //H5 y botoncerrar
+
+        vermodalh5.classList.add("fs-6");
+        vermodalh5.innerHTML = "Evaluar: ";
+        vermodalbotoncerrar.classList.add("btn-close");
+
+        //Inputs
+        verlabelnota.innerHTML = "Nota";
+        verlabelnota.classList.add("form-label");
+        verinputnota.id = "inputNota";
+        verinputnota.type = "text";
+        verinputnota.classList.add("form-control");
+        verinputnota.classList.add("mb-3");
+        verinputnota.name = "nota";
+        verinputnota.readOnly = true; 
+
+        verlabelobservacion.innerHTML = "Observaciones";
+        verlabelobservacion.classList.add("form-label");
+        verinputobservacion.id = "inputObservacion";
+        verinputobservacion.classList.add("form-control");
+        verinputobservacion.classList.add("mb-5");
+        verinputobservacion.style.height = "100px";
+        verinputobservacion.name = "observacion";
+        verinputobservacion.readOnly = true; 
+
+        verinput_idalumno.id = "id_alumno";
+        verinput_idalumno.name = "id_alumno";
+        verinput_idalumno.value = id_persona;
+        verinput_idalumno.style.display = "none";
+
+        verinput_idmaterial.id = "id_material";
+        verinput_idmaterial.name = "id_material";
+        verinput_idmaterial.value = id_material;
+        verinput_idmaterial.style.display = "none";
+
+        //Footer
+        vermodalfooter.classList.add("modal-footer");
+
+        document.body.appendChild(vermodal);
+        vermodal.appendChild(vermodalcontenido);
+        vermodalcontenido.appendChild(vermodalheader);
+        vermodalcontenido.appendChild(vermodalbody);
+        vermodalcontenido.appendChild(vermodalfooter);
+        vermodalheader.appendChild(vermodalh5);
+        vermodalheader.appendChild(vermodalbotoncerrar);
+        vermodalbody.appendChild(verbr);
+        vermodalbody.appendChild(verform);
+        verform.appendChild(verlabelnota);
+        verform.appendChild(verinputnota);
+        verform.appendChild(verlabelobservacion);
+        verform.appendChild(verinputobservacion);
+        verform.appendChild(verinput_idalumno);
+        verform.appendChild(verinput_idmaterial);
+
+        rellenarModalVer();
+
+        const vercloseModal = document.querySelector('.btn-close');
+
+        vercloseModal.addEventListener('click', (e)=> {
+
+            e.preventDefault();
+            vermodal.remove();
+
+        });
     }
 
 </script>
