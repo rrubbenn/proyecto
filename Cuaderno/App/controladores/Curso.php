@@ -29,8 +29,37 @@ class Curso extends Controlador{
         $this->datos["CursosAlumno"]=$this->CursoModelo->getCursosAlumno($this->datos['usuarioSesion']->id_persona);
         $this->datos["CursosAdmin"]=$this->CursoModelo->getCursosAdmin();
 
-        $this->vista("CursosProfesor/index",$this->datos);
+        $this->vista("Cursos/index",$this->datos);
 
+    }
+
+    public function add_curso() {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $datos = $_POST;
+
+            $this->vistaApi($this->CursoModelo->addCurso($datos));
+
+        }
+    }
+
+    public function del_curso(){
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            
+            $id_curso = $_POST["id_curso"];
+
+            if ($this->CursoModelo->delCurso($id_curso)){
+                
+                $this->vistaApi(true);
+
+            } else {
+                
+                $this->vistaApi(false);
+
+            }
+        }
     }
 
     /////////////////////////////////////////////////////////
@@ -49,7 +78,7 @@ class Curso extends Controlador{
 
         $this->datos["cursoactual"] = $id_curso;
 
-        $this->vista("/CursosProfesor/ver_curso",$this->datos);
+        $this->vista("/Cursos/ver_curso",$this->datos);
 
     }
     
@@ -68,7 +97,7 @@ class Curso extends Controlador{
 
         $this->datos["cursoactual"]= $id_curso;
 
-        $this->vista("/CursosProfesor/ver_profesores",$this->datos);
+        $this->vista("/Cursos/ver_profesores",$this->datos);
 
     }
 
@@ -102,9 +131,9 @@ class Curso extends Controlador{
         } 
     }
 
-    public function rellenarSelectProfesor() {
+    public function rellenarSelectProfesor($id_curso) {
 
-        $datos = $this->CursoModelo->getProfesorSelectDNI();
+        $datos = $this->CursoModelo->getProfesorSelectDNI($id_curso);
 
         $this->vistaApi($datos);
 
@@ -126,7 +155,7 @@ class Curso extends Controlador{
 
         $this->datos["cursoactual"] = $id_curso;
 
-        $this->vista("/CursosProfesor/ver_alumnos",$this->datos);
+        $this->vista("/Cursos/ver_alumnos",$this->datos);
 
     }
 
@@ -160,9 +189,9 @@ class Curso extends Controlador{
         } 
     }
 
-    public function rellenarSelectAlumno() {
+    public function rellenarSelectAlumno($id_curso) {
 
-        $datos = $this->CursoModelo->getAlumnoSelectDNI();
+        $datos = $this->CursoModelo->getAlumnoSelectDNI($id_curso);
 
         $this->vistaApi($datos);
 
@@ -273,7 +302,7 @@ class Curso extends Controlador{
         
         $this->datos["materialNoRealizado"] = $this->CursoModelo->getAlumnosNoRealizados($id_material);
 
-        $this->vista("/CursosProfesor/ver_material",$this->datos);
+        $this->vista("/Cursos/ver_material",$this->datos);
 
     }
     
@@ -289,6 +318,32 @@ class Curso extends Controlador{
                 echo "error";
             }
             
+        } 
+    }
+
+    public function edit_notas($id_material) {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $nota = $_POST;
+
+            if ($nota['nota'] == "") {
+
+                if ($this->CursoModelo->deleteNotas($nota)) {
+                    redireccionar("/curso/ver_material/".$id_material);
+                }else{
+                    echo "error";
+                }
+
+            } else {
+
+                if ($this->CursoModelo->editNotas($nota)) {
+                    redireccionar("/curso/ver_material/".$id_material);
+                }else{
+                    echo "error";
+                }
+
+            }
         } 
     }
 
