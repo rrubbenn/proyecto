@@ -1,8 +1,5 @@
 <?php require_once RUTA_APP.'/vistas/inc/header_curso.php'; ?>
 
-
-<?php print_r($datos['usuarioSesion']); ?>
-
 <div class="container">
 
     <nav aria-label="breadcrumb">
@@ -21,7 +18,7 @@
                         <button 
                         type="button" 
                         class="btn btn-primary col-1" 
-                        <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.")'" ?>> 
+                        <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.", 1)'" ?>> 
                             <i class="bi bi-pencil-square"></i> 
                         </button>
                         <button 
@@ -44,7 +41,7 @@
                             <button 
                             type="button" 
                             class="btn btn-primary col-1" 
-                            <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.")'" ?>> 
+                            <?php echo "onclick='generarModal(".$datos['material']->id_material.",".$alumno->id_persona.", 0)'" ?>> 
                                 <i class="bi bi-pencil-square"></i> 
                             </button>
                         <?php endif ?>
@@ -104,7 +101,7 @@
     let labelobservacion = document.createElement("label");
     let br = document.createElement("br");
 
-    function generarModal(id_material, id_persona) {
+    function generarModal(id_material, id_persona, evaluado) {
 
         //Modal
         modal.classList.add("modal-manual");
@@ -119,13 +116,28 @@
         modalbody.classList.add("modal-body");
 
         //Form
-        ruta_url = <?php echo json_encode(RUTA_URL) ?>;
-        ruta_addnota = "/curso/add_notas/" + id_material;
-        ruta = ruta_url+ruta_addnota;
-        
-        form.id = "formulario";
-        form.method = "post";
-        form.action = ruta;
+
+        if (evaluado == 0) {
+
+            ruta_url = <?php echo json_encode(RUTA_URL) ?>;
+            ruta_addnota = "/curso/add_notas/" + id_material;
+            ruta = ruta_url+ruta_addnota;
+            
+            form.id = "formulario";
+            form.method = "post";
+            form.action = ruta;
+
+        } else {
+
+            ruta_url = <?php echo json_encode(RUTA_URL) ?>;
+            ruta_editnota = "/curso/edit_notas/" + id_material;
+            ruta = ruta_url+ruta_editnota;
+            
+            form.id = "formulario";
+            form.method = "post";
+            form.action = ruta;
+
+        }
 
         //H5 y botoncerrar
 
@@ -166,6 +178,7 @@
         inputboton.classList.add("btn");
         inputboton.classList.add("btn-success");
         inputboton.id = "guardar";
+        inputboton.disabled = "true";
 
         //Footer
         modalfooter.classList.add("modal-footer");
@@ -189,14 +202,61 @@
 
         rellenarModal();
 
+        let regexNota = /^[1-9]\d*(\.\d+)?$/;
+
+        let notaValidada = false;
+
+        const campoNota = document.querySelector('#inputNota');
+
+        campoNota.addEventListener('keyup', (e)=> {
+
+            if (regexNota.test(campoNota.value)) {
+
+                campoNota.classList.remove("is-invalid");
+                campoNota.classList.add("is-valid");
+                notaValidada = true;
+
+            } else {
+
+                campoNota.classList.remove("is-valid");
+                campoNota.classList.add("is-invalid");
+                notaValidada = false;
+
+            }
+
+        });
+
+        const botonguardar = document.querySelector('#guardar');
+
+        document.addEventListener('keyup', (e)=> {
+
+            if (notaValidada === true) {
+
+                botonguardar.removeAttribute("disabled");
+
+            } else {
+
+                botonguardar.disabled = "true";
+
+            }
+
+        });
+
         const closeModal = document.querySelector('.btn-close');
 
         closeModal.addEventListener('click', (e)=> {
 
             e.preventDefault();
+
+            campoNota.classList.remove("is-invalid");
+            campoNota.classList.remove("is-valid");
+
+
             modal.remove();
 
         });
+
+        
 
     }
 

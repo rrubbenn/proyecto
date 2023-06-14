@@ -17,11 +17,11 @@
                 <button type="submit" class="btn btn-primary"> <i class="bi bi-search"></i> </button>
             </div>
         </div>
-        <?php if($datos['usuarioSesion']->id_rol == 3): ?>
+        <?php if ($datos['usuarioSesion']->id_rol == 3): ?>
             <div class="col-2"> 
                 <button 
                 class="btn btn-link"
-                <?php echo "onclick='generarModal(".$datos['cursoactual'].")'" ?>>
+                <?php echo "onclick='generarModal(".$datos['cursoactual'].")'" ?>> 
                     <i class="bi bi-person-add fs-1"></i> 
                 </button>
             </div>
@@ -40,17 +40,17 @@
                         <th> Acciones </th>
                     <?php endif ?>
                 </tr>
-                <?php foreach($datos['alumnos'] as $alumno): ?>
+                <?php foreach($datos['profesores'] as $profesor): ?>
                     <tr>
-                        <td> <?php echo $alumno->nombre ?> </td>
-                        <td> <?php echo $alumno->apellidos ?> </td>
-                        <td> <?php echo $alumno->mail ?> </td>
-                        <td> <?php echo $alumno->telefono ?> </td>
+                        <td> <?php echo $profesor->nombre ?> </td>
+                        <td> <?php echo $profesor->apellidos ?> </td>
+                        <td> <?php echo $profesor->mail ?> </td>
+                        <td> <?php echo $profesor->telefono ?> </td>
                         <?php if($datos['usuarioSesion']->id_rol == 3): ?>
                             <td> 
                                 <a 
-                                href="#"
-                                <?php echo "onclick='generarModalBorrar(".$datos['cursoactual'].",".$alumno->id_persona.")'" ?> > 
+                                href="#" 
+                                <?php echo "onclick='generarModalBorrar(".$datos['cursoactual'].",".$profesor->id_persona.")'" ?> >
                                     <i class="bi bi-person-dash fs-4"></i> 
                                 </a>
                             </td>
@@ -74,7 +74,7 @@
     let modalfooter = document.createElement("div");
     let form = document.createElement("form");
     let input_idcurso = document.createElement("input");
-    let input_idalumno = document.createElement("input");
+    let input_idprofesor = document.createElement("input");
     let labeldni = document.createElement("label");
     let labelnombre = document.createElement("label");
     let labelapellidos = document.createElement("label");
@@ -107,7 +107,7 @@
 
         //Form
         ruta_url = <?php echo json_encode(RUTA_URL) ?>;
-        ruta_addnota = "/curso/add_alumno_curso/" + id_curso;
+        ruta_addnota = "/curso/add_profesor_curso/" + id_curso;
         ruta = ruta_url+ruta_addnota;
         
         form.method = "post";
@@ -117,7 +117,7 @@
         //H5 y botoncerrar
 
         modalh5.classList.add("fs-6");
-        modalh5.innerHTML = "Añadir Alumno";
+        modalh5.innerHTML = "Añadir Profesor";
         modalbotoncerrar.classList.add("btn-close");
 
         //Inputs
@@ -138,7 +138,6 @@
 
 
 
-        selectdni.type = "text";
         selectdni.classList.add("form-control");
         selectdni.classList.add("mb-3");
         selectdni.name = "dni";
@@ -169,14 +168,14 @@
         inputtelefono.name = "telefono";
         inputtelefono.disabled = true;
 
-        input_idalumno.name = "id_alumno";
-        input_idalumno.id = "id_alumno";
-        input_idalumno.style.display = "none";
+        input_idprofesor.name = "id_profesor";
+        input_idprofesor.id = "id_profesor";
+        input_idprofesor.style.display = "none";
 
         input_idcurso.name = "id_curso";
         input_idcurso.id = "id_curso";
-        input_idcurso.value = id_curso;
         input_idcurso.style.display = "none";
+        input_idcurso.value = id_curso;
 
         //Boton Guardar
         inputboton.type = "submit";
@@ -206,12 +205,12 @@
         form.appendChild(inputmail);
         form.appendChild(labeltelefono);
         form.appendChild(inputtelefono);
-        form.appendChild(input_idalumno);
+        form.appendChild(input_idprofesor);
         form.appendChild(input_idcurso);
         form.appendChild(inputboton);
 
-        rellenarSelect();
-
+        rellenarSelect(id_curso);
+        
         const closeModal = document.querySelector('.btn-close');
 
         closeModal.addEventListener('click', (e)=> {
@@ -219,7 +218,7 @@
             e.preventDefault();
             
             while (selectdni.options.length) selectdni.remove(0);
-            input_idalumno.value = "";
+            input_idprofesor.value = "";
             inputnombre.value = "";
             inputapellidos.value = "";
             inputmail.value = "";
@@ -227,13 +226,16 @@
             
             modal.remove();
 
+            
+            
+
         });
 
     }
 
-    async function rellenarSelect(){
+    async function rellenarSelect(id_curso){
 
-        await fetch(`<?php echo RUTA_URL?>/curso/rellenarSelectAlumno`, {
+        await fetch(`<?php echo RUTA_URL?>/curso/rellenarSelectProfesor/${id_curso}`, {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -249,7 +251,7 @@
 
                 dnis.forEach(function (dni) {
 
-                    selectdni.options.add(new Option(dni.dni, dni.dni));
+                    selectdni.options.add(new Option(dni.dni+" - "+dni.nombre+" "+dni.apellidos, dni.dni));
 
                 });
 
@@ -274,7 +276,7 @@
 
                 datos.forEach(function(dato){
 
-                    input_idalumno.value = dato.id_persona;
+                    input_idprofesor.value = dato.id_persona;
                     inputnombre.value = dato.nombre;
                     inputapellidos.value = dato.apellidos;
                     inputmail.value = dato.mail;
@@ -316,7 +318,7 @@
         //Form
         ruta_url = <?php echo json_encode(RUTA_URL) ?>;
 
-        ruta_addnota = "/curso/delete_alumno_curso/" + id_curso;
+        ruta_addnota = "/curso/delete_profesor_curso/" + id_curso;
 
         ruta = ruta_url+ruta_addnota;
 
@@ -374,5 +376,8 @@
     }
 
 </script>
+
+
+
 
 <?php require_once RUTA_APP.'/vistas/inc/footer.php' ?>
