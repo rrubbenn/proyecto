@@ -15,10 +15,21 @@
         </div>
     <?php endif ?>
 
-    <div class="col-4 mb-4">
-        <div class="d-flex mt-3">
-            <input type="text" id="buscador" onkeyup="busqueda()" placeholder="Buscar"> </input>
+    <div class="row col-12 mb-4">
+        <div class="col-4">
+            <input type="text" class="form-control" id="buscador" onkeyup="busqueda()" placeholder="Buscar"> </input>
             <!-- <button type="submit" class="btn btn-primary"> <i class="bi bi-search"></i> </button> -->
+        </div>
+        <div class="col-2">
+            <input type="date" class="form-control"> </input>
+        </div>
+        <div class="col-2">
+            <input type="date" class="form-control"> </input>
+        </div>
+        <div class="col-2">
+            <select id="selectanyos" class="form-control" onclick="rellenarSelectAnyos()" onchange="busqueda()">
+
+            </select>
         </div>
     </div>
 
@@ -596,6 +607,8 @@
 
     }
     
+    let elementoscopia = elementos;
+
     window.onload = actualizarVariables();
 
     console.log(elementos);
@@ -604,21 +617,19 @@
 
         var input = document.getElementById("buscador");
 
-        //console.log(elementos);
+        let selectanyos = document.getElementById("selectanyos");
 
-        let elementoscopia = elementos;
+        if (selectanyos.value != "") {
 
+            elementos = elementoscopia.filter(o => o.nombre.toUpperCase().includes(input.value.toUpperCase()) && o.anyo == selectanyos.value);
 
-        elementos = elementoscopia.filter(o => o.nombre.toUpperCase().includes(input.value.toUpperCase()));
+        } else {
 
-        //console.log(elementoscopia);
+            elementos = elementoscopia.filter(o => o.nombre.toUpperCase().includes(input.value.toUpperCase()));
 
-        //console.log(elementos);
+        }
 
         actualizarVariables();
-
-        elementos = elementoscopia;
-
 
     }
 
@@ -635,8 +646,6 @@
 
     function generarNumPag(numpaginas) {
 
-        
-
         let ulpaginacion = document.getElementById("ulpaginacion");
 
         if (ulpaginacion.hasChildNodes()) {
@@ -652,6 +661,7 @@
 
         anterior.classList.add("page-item");
         anterior.id = "anteriorpag";
+        anterior.setAttribute("onclick", "anteriorpag()");
         aanterior.classList.add("page-link");
         aanterior.innerHTML = "<";
 
@@ -679,6 +689,7 @@
 
         next.classList.add("page-item");
         next.id = "siguientepag";
+        next.setAttribute("onclick", "siguientepag()");
         anext.classList.add("page-link");
         anext.innerHTML = ">";
 
@@ -689,10 +700,7 @@
 
     generarNumPag(numpaginas);
 
-    const anteriorpag = document.getElementById("anteriorpag");
-    const siguientepag = document.getElementById("siguientepag");
-
-    siguientepag.addEventListener('click', (e)=> {
+    function siguientepag() {
 
         pagActual = pagActual + 1;
 
@@ -704,9 +712,9 @@
 
         paginar(pagActual);
 
-    });
+    };
 
-    anteriorpag.addEventListener('click', (e)=> {
+    function anteriorpag() {
 
         pagActual = pagActual - 1;
 
@@ -718,7 +726,7 @@
 
         paginar(pagActual);
 
-    });
+    };
 
     function paginar (pagina) {
 
@@ -760,7 +768,7 @@
             div1.classList.add("col-6");
             div1.classList.add("d-flex");
             div1.id = elemento.id_curso;
-            
+                
             
             div2.classList.add("card");
             div2.classList.add("col-12");
@@ -780,8 +788,6 @@
 
             }
 
-
-            
             a1.href = "/Cuaderno/curso/ver_curso/"+elemento.id_curso;
 
             div4.classList.add("col-6");
@@ -835,5 +841,34 @@
 
 </script>
 
+<script>
+
+    let addedanyos = [""];
+
+    function rellenarSelectAnyos() {
+
+        let selectanyos = document.getElementById("selectanyos");
+
+        elementos.forEach(function (elemento) {
+
+            if (!addedanyos.includes(elemento.anyo)) {
+
+                addedanyos.push(elemento.anyo);
+
+            }
+
+        });
+
+        addedanyos.sort();
+        
+        addedanyos.forEach(function (anyo) {
+            
+            selectanyos.options.add(new Option(anyo));
+
+        });
+
+    }
+
+</script>
 
 <?php require_once RUTA_APP.'/vistas/inc/footer.php' ?>
