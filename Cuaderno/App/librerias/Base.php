@@ -92,4 +92,7 @@
             return $this->dbh->lastInsertId();
         }
     
+        public function getLastId(){
+            return $this->dbh->lastInsertId();
+        }
     }

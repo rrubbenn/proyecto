@@ -23,22 +23,48 @@ class Usuario extends Controlador{
 
     }
 
-    public function index(){
+    public function index($pag){
 
-        $this->datos["Usuarios"]=$this->UsuarioModelo->getUsuarios();
+        $numusuarios = $this->UsuarioModelo->numUsuarios();
+        
+        $objporpaj = 10;
+        $paginas = ceil($numusuarios / $objporpaj);
+        
+        $pag = (int) $pag;
+        $inicio = ($pag - 1) * $objporpaj;
+        $fin = $objporpaj;
+
+        $this->datos["nPaginas"]=$paginas;
+
+        $this->datos["pagActual"] = $pag;
+
+        $this->datos["Usuarios"]=$this->UsuarioModelo->getUsuarios($inicio, $fin);
+        
 
         $this->vista("Usuarios/index",$this->datos);
 
     }
 
-    public function delete_usuario(){
+    public function add_usuario() {
+
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+
+            $datos = $_POST;
+
+            $this->UsuarioModelo->addUsuario($datos);
+
+        } 
+
+    }
+
+    public function delete_usuario($pag){
 
         if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
             $id_persona = $_POST['id_persona'];
 
             if ($this->UsuarioModelo->deleteUsuario($id_persona)) {
-                redireccionar("/usuario");
+                redireccionar("/usuario/".$pag);
             }else{
                 echo "error";
             }
@@ -58,14 +84,14 @@ class Usuario extends Controlador{
         } 
     }
 
-    public function editar_usuario(){
+    public function editar_usuario($pag){
 
         if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
             $datos = $_POST;
 
             if ($this->UsuarioModelo->editarUsuario($datos)) {
-                redireccionar("/usuario");
+                redireccionar("/usuario/".$pag);
             }else{
                 echo "error";
             }

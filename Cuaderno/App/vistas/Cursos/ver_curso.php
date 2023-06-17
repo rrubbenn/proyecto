@@ -1,8 +1,5 @@
 <?php require_once RUTA_APP.'/vistas/inc/header_curso.php'; ?>
 
-<?php print_r($datos['usuarioSesion']); ?>
-
-
 <div class="container">
 
     <nav aria-label="breadcrumb">
@@ -219,6 +216,7 @@
         inputnombretarea.classList.add("form-control");
         inputnombretarea.classList.add("mb-3");
         inputnombretarea.name = "nombre";
+        inputnombretarea.minLength = 3;
 
         labeldescripciontarea.innerHTML = "Descripción";
         inputdescripciontarea.id = "inputdescripciontarea";
@@ -264,7 +262,65 @@
         closeModal.addEventListener('click', (e)=> {
 
             e.preventDefault();
+
+            inputnombretarea.value = "";
+            inputnombretarea.classList.remove("is-valid");
+            inputnombretarea.classList.remove("is-invalid");
+            inputdescripciontarea.innerHTML = "";
+
             modal.remove();
+
+        });
+
+        const validacionNombre = document.querySelector('#inputnombretarea');
+        
+        let Nombrevalidado = false;
+        let regNombre = /^[a-zA-Z0-9\s]*$/;
+
+        validacionNombre.addEventListener('keyup', (e)=> {
+
+            if (regNombre.test(validacionNombre.value)) {
+
+                validacionNombre.classList.remove("is-invalid");
+                validacionNombre.classList.add("is-valid");
+                Nombrevalidado = true;
+
+            } else {
+
+                validacionNombre.classList.remove("is-valid");
+                validacionNombre.classList.add("is-invalid");
+                Nombrevalidado = false;
+
+            }
+        });
+
+        const botonguardar = document.querySelector('#botonguardar');
+
+        document.addEventListener('keyup', (e)=> {
+
+            if (Nombrevalidado === true) {
+
+                botonguardar.removeAttribute("disabled");
+
+            } else {
+
+                botonguardar.disabled = "true";
+
+            }
+
+        });
+
+        document.addEventListener('change', (e)=> {
+
+            if (Nombrevalidado === true) {
+
+                botonguardar.removeAttribute("disabled");
+
+            } else {
+
+                botonguardar.disabled = "true";
+
+            }
 
         });
 
@@ -376,6 +432,58 @@
 
             e.preventDefault();
             modaleditar.remove();
+
+        });
+
+        const validacionNombre = document.querySelector('#inputnombretarea');
+        
+        let Nombrevalidado = false;
+        let regNombre = /^[a-zA-Z0-9\s]*$/;
+
+        validacionNombre.addEventListener('keyup', (e)=> {
+
+            if (regNombre.test(validacionNombre.value)) {
+
+                validacionNombre.classList.remove("is-invalid");
+                validacionNombre.classList.add("is-valid");
+                Nombrevalidado = true;
+
+            } else {
+
+                validacionNombre.classList.remove("is-valid");
+                validacionNombre.classList.add("is-invalid");
+                Nombrevalidado = false;
+
+            }
+        });
+
+        const botonguardar = document.querySelector('#botonguardar');
+
+        document.addEventListener('keyup', (e)=> {
+
+            if (Nombrevalidado === true) {
+
+                botonguardar.removeAttribute("disabled");
+
+            } else {
+
+                botonguardar.disabled = "true";
+
+            }
+
+        });
+
+        document.addEventListener('change', (e)=> {
+
+            if (Nombrevalidado === true) {
+
+                botonguardar.removeAttribute("disabled");
+
+            } else {
+
+                botonguardar.disabled = "true";
+
+            }
 
         });
 

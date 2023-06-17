@@ -38,6 +38,46 @@ class CursoModelo {
         return $this->db->registros();
     }
 
+    public function addCurso($datos) {
+
+        $this->db->query("INSERT INTO Curso(nombre, fecha_inicio, fecha_fin, anyo)
+                                    VALUES (:nombre, :fecha_inicio, :fecha_fin, :anyo)");
+
+        $this->db->bind(':nombre',$datos['nombre']);
+        $this->db->bind(':fecha_inicio',$datos['fecha_inicio']);
+        $this->db->bind(':fecha_fin',$datos['fecha_fin']);
+        $this->db->bind(':anyo',$datos['anyo']);
+        
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return $this->db->getLastId();
+
+        } else {
+
+            return false;
+
+        }
+    }
+
+    public function delCurso($id_curso) {
+
+        $this->db->query("DELETE FROM Curso WHERE id_curso = :id_curso");
+
+        $this->db->bind(':id_curso',$id_curso);
+            
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
     /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////
     /////////////RELACIONADO CON ver_curso //////////////////
@@ -119,9 +159,13 @@ class CursoModelo {
         }
     }
 
-    public function getProfesorSelectDNI(){
+    public function getProfesorSelectDNI($id_curso){
         
-        $this->db->query("SELECT P.dni FROM Persona P WHERE EXISTS (SELECT * FROM Profesor Pr WHERE P.id_persona = Pr.id_profesor)");
+        $this->db->query("SELECT P.dni, P.nombre, P.apellidos FROM Persona P 
+                            WHERE EXISTS (SELECT * FROM Profesor Pr WHERE P.id_persona = Pr.id_profesor)
+                            AND NOT EXISTS (SELECT * FROM Participar_Profesor PP WHERE P.id_persona = PP.id_profesor AND PP.id_curso = :id_curso)");
+
+        $this->db->bind(':id_curso',$id_curso);
 
         return $this->db->registros();
     }
@@ -183,9 +227,13 @@ class CursoModelo {
         }
     }
 
-    public function getAlumnoSelectDNI(){
+    public function getAlumnoSelectDNI($id_curso){
         
-        $this->db->query("SELECT P.dni FROM Persona P WHERE EXISTS (SELECT * FROM Alumno A WHERE P.id_persona = A.id_alumno)");
+        $this->db->query("SELECT P.dni, P.nombre, P.apellidos FROM Persona P 
+                            WHERE EXISTS (SELECT * FROM Alumno A WHERE P.id_persona = A.id_alumno)
+                            AND NOT EXISTS (SELECT * FROM Participar_Alumno PA WHERE P.id_persona = PA.id_alumno AND PA.id_curso = :id_curso)");
+
+        $this->db->bind(':id_curso',$id_curso);
 
         return $this->db->registros();
     }
@@ -257,6 +305,51 @@ class CursoModelo {
         $this->db->bind(':id_evaluable',$datos['id_material']);
         $this->db->bind(':nota',$datos['nota']);
         $this->db->bind(':observaciones',$datos['observacion']);
+            
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+    public function editNotas($datos) {
+
+        $this->db->query("UPDATE Realizar SET nota = :nota, observaciones = :observaciones WHERE id_alumno = :id_alumno AND id_evaluable = :id_evaluable");
+
+        $this->db->bind(':id_alumno',$datos['id_alumno']);
+        $this->db->bind(':id_evaluable',$datos['id_material']);
+        $this->db->bind(':nota',$datos['nota']);
+        $this->db->bind(':observaciones',$datos['observacion']);
+            
+        // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
+        if($this->db->execute()) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+    public function deleteNotas($datos) {
+
+        $this->db->query("DELETE FROM Realizar WHERE id_alumno = :id_alumno AND id_evaluable = :id_evaluable");
+
+        $this->db->bind(':id_alumno',$datos['id_alumno']);
+        $this->db->bind(':id_evaluable',$datos['id_material']);
+
+
+        print_r($datos);
             
         // Esto sirve para que en el modelo no sepa si darte error o redirigirte correctamente
         if($this->db->execute()) {
