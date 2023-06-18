@@ -266,7 +266,7 @@
             inputnombretarea.value = "";
             inputnombretarea.classList.remove("is-valid");
             inputnombretarea.classList.remove("is-invalid");
-            inputdescripciontarea.innerHTML = "";
+            inputdescripciontarea.value = "";
 
             modal.remove();
 
@@ -275,7 +275,7 @@
         const validacionNombre = document.querySelector('#inputnombretarea');
         
         let Nombrevalidado = false;
-        let regNombre = /^[a-zA-Z0-9\s]*$/;
+        let regNombre = /^(.*[a-zA-Z0-9]){3}/i;
 
         validacionNombre.addEventListener('keyup', (e)=> {
 
@@ -294,17 +294,15 @@
             }
         });
 
-        const botonguardar = document.querySelector('#botonguardar');
-
         document.addEventListener('keyup', (e)=> {
 
             if (Nombrevalidado === true) {
 
-                botonguardar.removeAttribute("disabled");
+                inputboton.removeAttribute("disabled");
 
             } else {
 
-                botonguardar.disabled = "true";
+                inputboton.disabled = "true";
 
             }
 
@@ -314,11 +312,11 @@
 
             if (Nombrevalidado === true) {
 
-                botonguardar.removeAttribute("disabled");
+                inputboton.removeAttribute("disabled");
 
             } else {
 
-                botonguardar.disabled = "true";
+                inputboton.disabled = "true";
 
             }
 
@@ -431,6 +429,10 @@
         closeModalEditar.addEventListener('click', (e)=> {
 
             e.preventDefault();
+            editarinputnombretarea.value = "";
+            editarinputnombretarea.classList.remove("is-valid");
+            editarinputnombretarea.classList.remove("is-invalid");
+            editarinputdescripciontarea.innerHTML = "";
             modaleditar.remove();
 
         });
@@ -438,7 +440,7 @@
         const validacionNombre = document.querySelector('#inputnombretarea');
         
         let Nombrevalidado = false;
-        let regNombre = /^[a-zA-Z0-9\s]*$/;
+        let regNombre = /^(.*[a-zA-Z0-9]){3}/i;
 
         validacionNombre.addEventListener('keyup', (e)=> {
 
@@ -457,17 +459,15 @@
             }
         });
 
-        const botonguardar = document.querySelector('#botonguardar');
-
         document.addEventListener('keyup', (e)=> {
 
             if (Nombrevalidado === true) {
 
-                botonguardar.removeAttribute("disabled");
+                editarinputboton.removeAttribute("disabled");
 
             } else {
 
-                botonguardar.disabled = "true";
+                editarinputboton.disabled = "true";
 
             }
 
@@ -477,11 +477,11 @@
 
             if (Nombrevalidado === true) {
 
-                botonguardar.removeAttribute("disabled");
+                editarinputboton.removeAttribute("disabled");
 
             } else {
 
-                botonguardar.disabled = "true";
+                editarinputboton.disabled = "true";
 
             }
 
@@ -611,6 +611,10 @@
         closeModalVer.addEventListener('click', (e)=> {
 
             e.preventDefault();
+            verinputnombretarea.value = "";
+            verinputnombretarea.classList.remove("is-valid");
+            verinputnombretarea.classList.remove("is-invalid");
+            verinputdescripciontarea.innerHTML = "";
             modalver.remove();
 
         });
