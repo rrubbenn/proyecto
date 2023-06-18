@@ -1,17 +1,7 @@
 
 <?php require_once RUTA_APP.'/vistas/inc/header.php'; ?>
 
-
-<div class="container">
-
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mt-3">
-            <li class="breadcrumb-item active" aria-current="page">Home</li>
-        </ol>
-    </nav>
-
-</div>
-
+<h3 class=""> ¡Bienvenido! </h3>
 
 
 <?php require_once RUTA_APP.'/vistas/inc/footer.php' ?>

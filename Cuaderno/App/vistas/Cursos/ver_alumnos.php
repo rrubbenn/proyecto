@@ -11,12 +11,6 @@
     </nav>
 
     <div class="row">
-        <div class="col-4">
-            <div class="d-flex mt-3">
-                <input type="text"> </input>
-                <button type="submit" class="btn btn-primary"> <i class="bi bi-search"></i> </button>
-            </div>
-        </div>
         <?php if($datos['usuarioSesion']->id_rol == 3): ?>
             <div class="col-2"> 
                 <button 
@@ -180,10 +174,13 @@
 
         //Boton Guardar
         inputboton.type = "submit";
+        inputboton.id = "botonguardar";
         inputboton.value = "Guardar";
         inputboton.classList.add("btn");
         inputboton.classList.add("btn-success");
-
+        inputboton.disabled = "true";
+        
+        
         //Footer
         modalfooter.classList.add("modal-footer");
         
@@ -260,6 +257,7 @@
     async function rellenarFormularioDNI(){
 
         let selectdni = document.getElementById("dni").value;
+        let botonguardar = document.getElementById("botonguardar");
 
         await fetch(`<?php echo RUTA_URL?>/curso/rellenarFormularioDNI/${selectdni}`, {
             headers: {
@@ -281,6 +279,8 @@
                     inputtelefono.value = dato.telefono;
 
                 });
+
+                botonguardar.removeAttribute("disabled");
                 
             })
     }

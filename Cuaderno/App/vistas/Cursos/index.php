@@ -2,11 +2,6 @@
 
 <div class="container">
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mt-3">
-            <li class="breadcrumb-item active" aria-current="page">Home</li>
-        </ol>
-    </nav>
     <?php if($datos['usuarioSesion']->id_rol == 3): ?>
         <div class="row mb-5">
             <div class="col-12 d-flex">
@@ -18,13 +13,12 @@
     <div class="row col-12 mb-4">
         <div class="col-4">
             <input type="text" class="form-control" id="buscador" onkeyup="busqueda()" placeholder="Buscar"> </input>
-            <!-- <button type="submit" class="btn btn-primary"> <i class="bi bi-search"></i> </button> -->
         </div>
         <div class="col-2">
-            <input type="date" class="form-control"> </input>
+            <input type="date" id="buscador_fecha_inicio" onchange="busqueda()" class="form-control"> </input>
         </div>
         <div class="col-2">
-            <input type="date" class="form-control"> </input>
+            <input type="date" id="buscador_fecha_fin" onchange="busqueda()" class="form-control"> </input>
         </div>
         <div class="col-2">
             <select id="selectanyos" class="form-control" onclick="rellenarSelectAnyos()" onchange="busqueda()">
@@ -219,7 +213,7 @@
 
         campoFechaInicio.addEventListener('change', (e)=> {
 
-                if (campoFechaInicio.value <= campoFechaFin.value) {
+                if (campoFechaInicio.value <= campoFechaFin.value && campoFechaInicio.value != "" && campoFechaFin.value != "") {
 
                     campoFechaInicio.classList.add("is-valid");
                     campoFechaInicio.classList.remove("is-invalid");
@@ -243,7 +237,7 @@
 
         campoFechaFin.addEventListener('change', (e)=> {
 
-                if (campoFechaInicio.value <= campoFechaFin.value) {
+                if (campoFechaInicio.value <= campoFechaFin.value && campoFechaInicio.value != "" && campoFechaFin.value != "" )  {
 
                     campoFechaInicio.classList.add("is-valid");
                     campoFechaInicio.classList.remove("is-invalid");
@@ -611,22 +605,62 @@
 
     window.onload = actualizarVariables();
 
-    console.log(elementos);
-
     function busqueda() {
 
         var input = document.getElementById("buscador");
-
         let selectanyos = document.getElementById("selectanyos");
+        let fecha_inicio = document.getElementById("buscador_fecha_inicio");
+        let fecha_fin = document.getElementById("buscador_fecha_fin");
 
-        if (selectanyos.value != "") {
+        if (selectanyos.value != "" && fecha_inicio.value != "" && fecha_fin.value != "") {
 
-            elementos = elementoscopia.filter(o => o.nombre.toUpperCase().includes(input.value.toUpperCase()) && o.anyo == selectanyos.value);
+            elementos = elementoscopia.filter(
+                o => o.nombre.toUpperCase().includes(input.value.toUpperCase()) 
+                && o.anyo == selectanyos.value 
+                && o.fecha_inicio == fecha_inicio.value 
+                && o.fecha_fin == fecha_fin.value);
+
+        } else if (selectanyos.value != "" && fecha_inicio.value != "") {
+
+            elementos = elementoscopia.filter(
+                o => o.nombre.toUpperCase().includes(input.value.toUpperCase()) 
+                && o.anyo == selectanyos.value 
+                && o.fecha_inicio == fecha_inicio.value );
+
+        } else if (fecha_inicio.value != "" && fecha_fin.value != "") {
+
+            elementos = elementoscopia.filter(
+                o => o.nombre.toUpperCase().includes(input.value.toUpperCase()) 
+                && o.fecha_inicio == fecha_inicio.value 
+                && o.fecha_fin == fecha_fin.value );
+
+        } else if (selectanyos.value != "" && fecha_fin.value != "") {
+
+            elementos = elementoscopia.filter(
+                o => o.nombre.toUpperCase().includes(input.value.toUpperCase()) 
+                && o.anyo == selectanyos.value 
+                && o.fecha_fin == fecha_fin.value );
+
+        } else if (fecha_inicio.value != "") {
+
+            elementos = elementoscopia.filter(
+                o => o.fecha_inicio == fecha_inicio.value);
+
+        } else if (fecha_fin.value != "") {
+
+            elementos = elementoscopia.filter(
+                o => o.fecha_fin == fecha_fin.value);
+
+        } else if (selectanyos.value != "") {
+
+            elementos = elementoscopia.filter(
+                o => o.nombre.toUpperCase().includes(input.value.toUpperCase()) 
+                && o.anyo == selectanyos.value);
 
         } else {
 
             elementos = elementoscopia.filter(o => o.nombre.toUpperCase().includes(input.value.toUpperCase()));
-
+            
         }
 
         actualizarVariables();
@@ -835,8 +869,6 @@
 
         });
         
-        
-
     }
 
 </script>
@@ -848,6 +880,8 @@
     function rellenarSelectAnyos() {
 
         let selectanyos = document.getElementById("selectanyos");
+
+        while (selectanyos.options.length) selectanyos.remove(0);
 
         elementos.forEach(function (elemento) {
 

@@ -4,12 +4,6 @@
 
 <div class="container">
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mt-3">
-            <li class="breadcrumb-item active" aria-current="page">Home</li>
-        </ol>
-    </nav>
-
     <div class="row">
         <!-- <div class="col-4">
             <div class="d-flex mt-3">
